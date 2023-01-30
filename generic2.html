@@ -52,8 +52,11 @@
 							<span class="image main"><img src="images/pic15.jpg" alt="" /></span>
 							<p>Using C++, I have made a game utilising a physics system with complex collision detection, multiple forms of artificial intelligence, and pathfinding.</p>
 							<span class="image main"><img src="images/pic16.jpg" alt="" /></span>
-							<p>The physics system features spatial acceleration structures to improve performance when using many physics objects.</p>
-							<p>Characters are controlled using both state machines and behaviour trees. Both of these utilise an A* pathfinding algorithm.</p>
+							<p>The physics system provides physics simulation to all objects in the game, featuring spatial acceleration structures to improve performance when using many physics objects.<br />
+							Collisions may be processed between spheres, axis-aligned bounding boxes (AABBs), and capsules.</p>
+							<p>Characters are controlled using both state machines and behaviour trees, the first to control a character patrolling a path unless disrupted, in which case it will flee.<br />
+							The behaviour tree directs a character to patrol and search for the player, investigating disturbances and pursuing the player if they are found.<br />
+							Both of these utilise an A* pathfinding algorithm.</p>
 							<p>A menu state and pausing the game is achieved through the use of pushdown automata.</p>
 							<p>Made using C++, in Visual Studio 2019.</p>
 							<p>Videos may be seen below.</p>
