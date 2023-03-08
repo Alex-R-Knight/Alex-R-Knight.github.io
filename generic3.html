@@ -58,7 +58,12 @@
 							This greatly improves user experience through changes to movement, whilst the movement of the player and camera are interpolated to allow for smooth movement. It can be found in the video below.</p>
 							<p>The game is also being developed with networking code to which I am contributing, to allow for competitive play or cooperative against AI-controlled enemies.</p>
 							<p>Key to all gameplay is the terrain painting system, for which a demo of the initial system can be found below. With this, players will paint the environment to increase their team's score.<br />
-							This system saves the collision positions of projectiles, and paints the terrain through using the fragment shader. A more detailed system is in development, to be shown when complete.</p>
+							This system saves the collision positions of projectiles, and paints the terrain through using the fragment shader. This also passes through a colour value used to determine the colour of the paint impact.<br />
+							These impact points are handled on an object-by-object basis, in which each object will overwrite old collisions past a specified limit to aid performance.</p>
+							<p>Due to the potential for the paint system to change throughout development, a score management system that is entirely independant of the graphical side of the paint system has been developed.<br />
+							This effectively tracks the players' coverage of the map through nodes which are distributed across all placed objects and the accessible floor area. These react to projectile collisions, overriding their paint values if within the radius of the projectile.<br />
+							These nodes may then be tallied by colour in order to compare and display each player or team's score.</p>
+							<p>Further features such as the use of sound middleware and a further developed HUD, such as a minimap, have also been developed and are being further improved.</p>
 							<p>Made using C++, in Visual Studio 2022.</p>
 							<p>Videos may be seen below.</p>
 							<iframe width="500" height="500"
