@@ -51,19 +51,27 @@
 						<div class="inner">
 							<h1>Team Project: Squid Imitator</h1>
 					
-							<p>Using C++, my team and I are working on a game utilising a terrain painting system, networking, an improved player control system and more.<br />
-							I will update this page as the project develops and more features are added.</p>
+							<p>Using C++, my team and I have worked on a game utilising a terrain painting system, networking, an improved player control system and more.</p>
 							<span class="image main"><img src="images/pic17.jpg" alt="" /></span>
 							<p>I have worked on the implementation of physics middleware ReactPhysics3D to replace the physics code of the last game project, and the development of an improved character and camera control system.<br />
 							This greatly improves user experience through changes to movement, whilst the movement of the player and camera are interpolated to allow for smooth movement. It can be found in the video below.</p>
-							<p>The game is also being developed with networking code to which I am contributing, to allow for competitive play or cooperative against AI-controlled enemies.</p>
-							<p>Key to all gameplay is the terrain painting system, for which a demo of the initial system can be found below. With this, players will paint the environment to increase their team's score.<br />
+							<p>The game features singleplayer, local-splitscreen and networked multiplayer modes of play. In singleplayer the player must paint the map to the best of their ability whilst avoiding an AI-controlled enemy.<br />
+							In multiplayer modes, teams must compete to spread their paint colour across more of the map than their opponents.<br />
+							In both modes, powerups are spread across the level, granting players advantages such as speed or a shotgun-like paint attack.</p>
+
+							<p>Key to all gameplay is the terrain painting system, for which a video can be found below. With this, players paint the environment to increase their team's score.<br />
 							This system saves the collision positions of projectiles, and paints the terrain through using the fragment shader. This also passes through a colour value used to determine the colour of the paint impact.<br />
 							These impact points are handled on an object-by-object basis, in which each object will overwrite old collisions past a specified limit to aid performance.</p>
-							<p>Due to the potential for the paint system to change throughout development, a score management system that is entirely independant of the graphical side of the paint system has been developed.<br />
+							
+							<p>Projectiles make use of pooling, using a limited quantity of projectile objects which are recycled through their storage below the map in a "static" state when unused, compared to the near-constant creation and deletion of objects.</p>
+							
+							<p>Due to multiple paint systems being developed and tested throughout development, I developed a score management system that is entirely independant of the graphical side of the paint system.<br />
 							This effectively tracks the players' coverage of the map through nodes which are distributed across all placed objects and the accessible floor area. These react to projectile collisions, overriding their paint values if within the radius of the projectile.<br />
-							These nodes may then be tallied by colour in order to compare and display each player or team's score.</p>
-							<p>Further features such as the use of sound middleware and a further developed HUD, such as a minimap, have also been developed and are being further improved.</p>
+							The nodes are stored on a per-parent_object basis, these objects also stored within map_nodes, the grid positions by which the map is generated from a text file (an effective level design tool).<br />
+							Hence, on a projectile collision, a spherical object of equal radius to the paint splatter checks terrain objects for overlap. On any that pass this check, the paint process is applied to the object, and its paint nodes are checked.<br />
+							The change in both red and blue paint nodes then updates both the global score, and the score of the object's map_node, which is used by the games minimap to display the spread of each team's paint across the map.</p>
+							
+							<p>The game uses irrKlang as sound middleware, with proper usage of sound, and also features a HUD and minimap.</p>
 							<p>Made using C++, in Visual Studio 2022.</p>
 							<p>Videos may be seen below.</p>
 							<iframe width="500" height="500"
