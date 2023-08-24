@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Alex Knight Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									</span><span class="title">To Home Page</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="generic.html">Graphics Project</a></li>
+							<li><a href="generic2.html">Game Project</a></li>
+							<li><a href="generic3.html">Team Project</a></li>
+							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
+							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>Graphical Work - Screen Space Effects and Extra</h1>
+							
+							<p>Building on previous OpenGL work, various screen-space effects were created and optimised as part of a university project.</p>
+							
+							<h2>Key features:</h2>
+
+							<ul>
+								<li> <a href="#reflection-anchor">Reflections</a> </li>
+								<li> <a href="#illumination-anchor">Global Illumination</a> </li>
+								<li> <a href="#ssao-anchor">Screen-Space Ambient Occlusion</a> </li>
+								<li> <a href="#shadow-anchor">Screen-Space Shadows</a> </li>
+								<li> <a href="#edge-anchor">Edge-Detection Antialiasing</a> </li>
+								<li> <a href="#conclusion-anchor">Conclusion</a> </li>
+							</ul>
+							
+							<iframe width="1000" height="500"
+								src="https://www.youtube.com/embed/2BSD86KPW9g">
+							</iframe>
+							<p></p>
+							<a id="reflection-anchor">Screen-Space Reflections:</a>
+							
+							<p>Reflections were achieved using screen-space raymarching. This served as the first feature made using raymarching and so was instrumental in its implementation and testing before use in other methods.<br />
+							Meshes may be given "reflectivity maps" to designate the reflectivity across the surface, reflective surfaces showing a degree of reflection of visible geometry based on their reflectivity.</p>
+							
+							<a id="illumination-anchor">Screen-Space Global Illumination:</a>
+							
+							<p>Global-illumination is achieved through raymarching once for each fragment in a direction determined through cosine-weighted hemisphere sampling.<br />
+							Raymarch intersection positions are then sampled for a mix of base-colour and lighting information to simulate received indirect light from the surroundings. This may then be denoised and applied in the combination stage of deferred rendering.</p>
+							
+							<a id="ssao-anchor">Screen-Space Ambient Occlusion:</a>
+							
+							<p>Screen-space ambient occlusion is done through sampling several positions around each fragment to determine its exposure to ambient light.<br />
+							These positions are determined through pre-generation of testing kernel positions within a hemisphere, which may then be randomly rotated via pregenerated noise values to improve the quality of results.<br />
+							SSAO testing results are written to a texture for use in the combination stage of deferred rendering, though undergo slight denoising first to further improve the quality of results.</p>
+							
+							<span class="image main"><img src="images/pic27.jpg" alt="" /></span>
+							
+							<a id="shadow-anchor">Screen-Space Shadows:</a>
+							
+							<p>Screen-space shadows utilise a simplified raymarching process that can still detect a ray intersection, but does not require the exact position of first intersection.<br />
+							This is used by each light, testing each fragment within the light area of effect in order to detect occlusion from small details that may not be properly caught by the use of shadow-mapping alone.<br />
+							Due to screen-space limitations, this cannot be used for all shadows in a standalone implementation, so much be used in tandem with shadow-mapping.</p>
+							
+							<a id="edge-anchor">Edge-Detection Antialiasing:</a>
+							
+							<p>In addition to the screen-space effects above, a form of antialiasing was achieved through the use of Sobel edge-detection considering multiple fragment properties.<br />
+							A Sobel kernel is tested along both axial directions considering the difference in both depth values and normal direction in order to detect all surface-edge fragments despite limitations of each considered factor individually.<br />
+							This information is used to apply a blurred version of the image only to fragments considered to be part of a surface-edge, in order to remove aliased edges in the final image.<br />
+							This system may also account for illumination information, altering the extent of edge-blurring depending on illumination values.</p>
+							
+							<span class="image main"><img src="images/pic28.jpg" alt="" /></span>
+							
+							<a id="conclusion-anchor">Project Takeaways:</a>
+							
+							<p>My work on this project helped to teach me about global-illumination methods and screen-space effects, as well as building on my foundational knowledge of rendering and OpenGL.<br />
+							I became familiar with both the benefits of screen-space effects in their performance-friendliness and their limitations from factors such as a lack of scene information beyond that immediately visible.<br />
+							Alongside helping to further familiarise myself with working using OpenGL, this project helped me to practise problem solving and debugging systems.<br />
+							The idea of edge-detection based antialiasing was also a pleasant success, expanding on earlier ideas and research carried out in my initial OpenGL work regarding edge detection methods.</p>
+							
+							<p>Overall this project was a success in implementing and testing various screen-space effects, as well as investigating their performance and achievable extents of optimising these methods.<br />
+							With the correct inclusion and use of parameters for each method, process time could be more than halved in many cases, showing the importance of individually fine tuning effects to maximise performance without harming the visual results.</p>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>My links</h2>
+								<ul class="icons">
+									<li><a href="https://github.com/Alex-R-Knight" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; Alex Knight | 2023 </li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
