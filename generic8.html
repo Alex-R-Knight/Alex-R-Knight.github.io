@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Alex Knight Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									</span><span class="title">To Home Page</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
+							<li><a href="generic8.html">Unreal Engine C++ Development</a></li>
+							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
+							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="generic3.html">Team Project</a></li>							
+							<li><a href="generic2.html">Game Project</a></li>
+							<li><a href="generic.html">Graphics Project</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>Unreal Engine Five - C++ Development</h1>
+							
+							<p>Building on previous UE5 learning to create mechanics in the engine using C++ to given requirements.</p>
+							
+							<h2>Key features:</h2>
+
+							<ul>
+								<li> <a href="#foundation-anchor">Initial Foundations</a> </li>
+								<li> <a href="#iteration1-anchor">First design iteration – Mouse/Cursor Interaction</a> </li>
+								<li> <a href="#dragging1-anchor">First Implementation of Object Dragging</a> </li>
+								<li> <a href="#dragging2-anchor">Object Dragging – Momentum</a> </li>
+								<li> <a href="#highlight1-anchor">Object Highlight Improvements</a> </li>
+								<li> <a href="#dragging3-anchor">Object Dragging Input Expansion</a> </li>
+								<li> <a href="#cursor-anchor">Mouse Cursor Following Points in 3D Space</a> </li>
+							</ul>
+							
+							<p>I am recording here my work with Unreal Engine 5 creating an interaction system, and the problem solving involved.<br />
+							This has been done in C++, and made following feature requests from a friend, whilst I design features for ease of use in the engine by a user not familiar with C++.</p>							
+							
+							<span class="image main">
+							
+								<video controls>
+								  <source src="images/DemoVideo.mp4" type="video/mp4">
+								</video>
+							
+							</span>
+							
+							
+							<a id="foundation-anchor">Initial Foundations:</a>
+							
+							<p>My first steps to developing the interaction system were to create a scene component attached to the player character’s camera to handle player-side logic. This would use raycasts to find the actor being looked at by the player, and check if this actor contained an interactor component-derived class or children of this class. These interactor component child classes will contain overrides of an interact function, to contain all interaction logic for the object.<br />
+							A highlight effect is applied to interactable objects when they are looked at, confirming them as the currently “locked in” interactable. The locked in interactable is changed either when the player looks at a new interactable object, or if they are not looking directly at any acceptable objects for a sufficient amount of time.<br />
+							This was done for player convenience, to reduce the effect of misinputs like slightly overshooting an object with the mouse before pressing the interact key. The time for this deselection was made a value accessible and changeable in the editor, for ease of adjustment.</p>
+							
+							<iframe width="600" height="340"
+								src="images/objecthighlightgif.gif">
+							</iframe>
+							
+							<p>The first implemented forms of interaction were an interactor component child class that would send a message to the player when used. This appeared to be a reasonable and uncomplicated starting point. For this the means to add a message widget to the player screen was added, through a function taking both the text to display and the time it should display for as parameters.<br />
+							This created a problem of rapid interaction potentially displaying multiple instances of the widget to the screen at the same time, which was solved by instead keeping only one instance of the widget in use at any one time, which is deleted and replaced if the function is called again.<br />
+							Other functionality such as an object that would interpolate into a position in front of the player’s view, and allow free rotation to inspect and interact with details, was tested and whilst it did not survive into later versions, features such as switching to mouse cursor-based interaction would be reused.</p>
+							
+							<iframe width="1000" height="500"
+								src="images/bluetext.png">
+							</iframe>
+							<p></p>
+							
+							<a id="iteration1-anchor">First design iteration – Mouse/Cursor Interaction:</a>
+							
+							<p>After the foundational steps, the first feedback and design requests were given. The major feature to be added was the ability to toggle between ordinary mouse controls, and aiming at an object to interact with it, and replacing mouse-turning with a mouse cursor, which could hover over objects in order to select and interact with them.</p>
+							
+							<p>My approach to this was to add a widget of toggleable visibility for the cursor, in place of toggling the real mouse cursor’s visibility. This was done so that I could build upon this to add features such as context-sensitive changing of the cursor icon more easily.<br />
+							Cursor-mode is activated and deactivated through the holding and release of a key, and for its duration the ordinary mouse input to the player character for looking is disabled. The cursor would fire rays for interactable object detection based on its position on the screen.</p>
+							
+							<p>Once the cursor mode was implemented, I added the means for the cursor icon to change based on the type of interactable object that was locked in for interaction. This was achieved by adding a function to the interactor classes that would be called upon locking in of the selector. Each interactor child class could then set the relevant cursor icon from a selection within the widget, and carry out any other necessary actions.<br />
+							Finally, to allow for a degree of camera rotation whilst in cursor mode, I implemented a check whilst in cursor mode that would apply rotation if the cursor was sufficiently close to any edge of the screen within editor-set boundaries, enabling deliberate rotation by the player.</p>
+							
+							<iframe width="600" height="340"
+								src="images/cursoricons.gif">
+							</iframe>
+							<p></p>
+							
+							<a id="dragging1-anchor">First Implementation of Object Dragging:</a>
+							
+							<p>The key feature request after the implementation of a cursor mode was the ability to drag objects, such as draws and hinged doors. This feature would be heavily iterated upon.<br />
+							First, a parent draggable interactor class was made to hold the dragging logic shared between all draggable objects. This would handle all but the actual movement of the object, for which specific child classes would be made for different movement types.<br />
+							Dragging would be initiated by the holding of the interact button whilst a draggable object is locked in. I was using Unreal Engine’s Enhanced Input Action Mapping, which allowed for easy discerning between a tap or hold of the same key for different purposes.</p>
+							
+							<p>These draggable interactors would receive an input vector and use a dot product to compare this vector against its object’s direction vector. The greater the two vectors align, the more the interactor will move forwards or backwards between its two end-points of movement, leading to movement in the direction of one of these end points.<br />
+							In this first implementation, the input vector would come purely from mouse movement, in either standard or cursor mode. The vector was produced using the player camera, and by extension its interactor component’s up and right vectors multiplied by mouse input values.<br />
+							This produced a problem in that if the player’s view aligned enough with the object direction vector, then input could only be given in directions that would not induce movement.<br />
+							To solve this, I produced a second input vector that turned mouse up/down movement into the forwards/backwards direction and mixed these two input vectors based on a dot product of the player camera forward vector and the draggable object direction vector. Hence, the more the player view and direction vector align, the more the alternate vector is used for drag-input instead, solving the problem.</p>
+							
+							<iframe width="342" height="200"
+								src="images/dragging.gif">
+							</iframe>
+							<p></p>
+							
+							<p>This first implementation marked a milestone in progress, but also highlighted several problems to me, such as the current highlighting method showing the object through other surfaces, but also the way in which cursor movement did not properly match the movement of the object being dragged. Furthermore, there was a lack of momentum within dragged objects if they were released mid-movement.</p>
+							
+							
+							<a id="dragging2-anchor">Object Dragging – Momentum:</a>
+							
+							<p>To achieve the impression of momentum in dragged objects, I made the draggable interactor class record its last change in progress between end-points, and if dragging ceases, to instead move itself using this recorded value, which will decrease towards zero over time based on a given deceleration rate.<br />
+							This initially caused issues due to this value only updating when input was received, which it could then act on even if the object had come to a stop before the dragging was terminated. Hence, a check was added to remove this momentum value if the object became stationary whilst being dragged.</p>
+							
+							<iframe width="600" height="340"
+								src="images/momentum.gif">
+							</iframe>
+							<p></p>
+							
+							<a id="highlight1-anchor">Object Highlight Improvements:</a>
+							
+							<p>The initial object highlight method was functional but found unsuitable due to it highlighting the entire object, including that which was behind other geometry.<br />
+							This method uses UE5’s custom depth buffer, in which only highlightable objects have rendering their custom depth enabled, the buffer then being used for a simple edge detection method comparing the presence or lack thereof of custom depth buffer values.<br />
+							To improve upon this, I added the sampling of the standard depth buffer, and its comparison with the custom depth buffer in order to consider only parts of the object that were unoccluded by other geometry.<br />
+							This has proven successful, and is the current object highlight method in use.</p>
+							
+							<span class="image main"><img src="images/outlines.jpg" alt="" /></span>
+							
+							<a id="dragging3-anchor">Object Dragging Input Expansion:</a>
+							
+							<p>Whilst mouse input had been suitable adjusted for use controlling dragging, it was decided to also factor player movement whilst dragging into the movement of the object.<br />
+							Hence, player movement input would also send input vectors to the draggable interactor derived from the input combined with the player character forward and right vectors.<br />
+							This, along with all other input, would be multiplied by values changeable within the editor for easy adjustment of sensitivity to different input types. These could also be used to alter drag input/player movement speed depending on both the cursor mode and if dragging was underway.</p>
+							
+							<a id="cursor-anchor">Mouse Cursor Following Points in 3D Space:</a>
+							
+							<p>To solve the lack of correlation between draggable object and mouse cursor movement, significant changes had to be made.<br />
+							Firstly, a second cursor widget was created purely for dragging objects. Whenever a draggable object is locked in for interaction, the last point of contact between the player and the object is saved.<br />
+							When dragging is initiated, this point of contact is turned into an offset relative to the dragged object, as to follow it as it moves. This point of contact in world space may then be translated into a screen space position, used to set the location of the dragging cursor widget.<br />
+							Hence, this cursor will accurately stick to the dragged object in the place it was grabbed for as long as it is held.<br />
+							When dragging is terminated, the standard cursor widget resumes use. This initially caused an issue in that the cursor would reappear in the real mouse cursor’s position on-screen, which was not where the dragging cursor was last visible.<br />
+							To solve this, when dragging is terminated, the same screen-space position used to set the position of the dragging cursor is used to set the position of the mouse, and by extension the cursor widget that follows it.</p>
+							
+							<iframe width="600" height="340"
+								src="images/dragcursor.gif">
+							</iframe>
+							<p></p>
+							
+							<p>This project so far has been a great learning experience and has let me put what I have learned about UE5 into practice.<br />
+							I hope to continue expanding these features following the requirements of those using these mechanics.</p>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>My links</h2>
+								<ul class="icons">
+									<li><a href="https://github.com/Alex-R-Knight" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; Alex Knight | 2024 </li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
