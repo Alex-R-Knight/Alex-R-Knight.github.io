@@ -68,6 +68,7 @@
 								<li> <a href="#highlight1-anchor">Object Highlight Improvements</a> </li>
 								<li> <a href="#dragging3-anchor">Object Dragging Input Expansion</a> </li>
 								<li> <a href="#cursor-anchor">Mouse Cursor Following Points in 3D Space</a> </li>
+								<li> <a href="#dragging3-anchor">Further Improvement of Draggable Object Movement</a> </li>
 							</ul>
 							
 							<p>I am recording here my work with Unreal Engine 5 creating an interaction system, and the problem solving involved.<br />
@@ -168,6 +169,32 @@
 								src="images/dragcursor.gif">
 							</iframe>
 							<p></p>
+							
+							<a id="dragging3-anchor">Further Improvement of Draggable Object Movement:</a>
+							
+							<p>To create a smoother and more "weighty" reponse in draggable objects, I tested a new way of handling object movement.<br />
+							Where previously object momentum was reserved for movement after the player had released the object, it would now be the sole driving force in moving the object, where the player contributes to it via input, and the momentum naturally moves towards zero.<br />
+							During the implementation of this new method, I also improved on a previous design choice, by moving all input multipliers for different player conditions from the player character to the draggable object, allowing for better fine tuning of individual objects.<br />
+							This, after the tweaking of some parameters, produced smoother and overall better object movement.</p>
+							
+							<iframe width="800" height="600"
+								src="images/improvedswinggif.gif">
+							</iframe>
+							<p></p>
+							
+							<p>I also reenabled the player rotation from the cursor being close to the edge of the screen for dragging, because this produced smoother movement and allowed the player to continue to follow an object better.<br />
+							The rate of rotation was also changed to increase the closer the cursor gets to the edge, to create smoother movement compared to the original "on/off" state of turning.</p>
+							
+							<iframe width="600" height="340"
+								src="images/cursordrift.gif">
+							</iframe>
+							<p></p>
+							
+							<p>After this, I set about implementing basic UI features like a pause screen, start menu and options menu. These are not final, but rather implemented in this state for ease of testing, and because having no proper way to close the game when testing a packaged version was inconvenient. <br />
+							Some minor problem solving was required, such as opting to terminate dragging and cursor mode when pausing, due to their shared use of the cursor with the pause screen.
+							</p>
+							
+							
 							
 							<p>This project so far has been a great learning experience and has let me put what I have learned about UE5 into practice.<br />
 							I hope to continue expanding these features following the requirements of those using these mechanics.</p>
