@@ -70,13 +70,14 @@
 								<li> <a href="#dragging3-anchor">Object Dragging Input Expansion</a> </li>
 								<li> <a href="#cursor-anchor">Mouse Cursor Following Points in 3D Space</a> </li>
 								<li> <a href="#dragging3-anchor">Further Improvement of Draggable Object Movement</a> </li>
+								<li> <a href="#carry-anchor">Object Carrying and Precision Placement</a> </li>
 							</ul>
 							
 							<p>I am recording here my work with Unreal Engine 5 creating an interaction system, and the problem solving involved.<br />
 							This has been done in C++, and made following feature requests from a friend, whilst I design features for ease of use in the engine by a user not familiar with C++.</p>							
 							
 							
-							
+							<h2>Primary Demo Footage:</h2>
 							
 							<iframe width="1200" height="680"
 								
@@ -84,6 +85,15 @@
 								
 							</iframe>
 							<p></p>
+							
+							<h2>Secondary Demo Footage - Precision Object Placement:</h2>
+							<iframe width="1200" height="680"
+								
+								  <source src="images/ObjectCarryDemoVid.mp4" type="video/mp4">
+								
+							</iframe>
+							<p></p>
+							
 							
 							<a id="foundation-anchor">Initial Foundations:</a>
 							
@@ -206,7 +216,7 @@
 							<p>After this, I set about implementing basic UI features like a pause screen, start menu and options menu. These are not final, but rather implemented in this state for ease of testing, and because having no proper way to close the game when testing a packaged version was inconvenient. <br />
 							Some minor problem solving was required, such as opting to terminate dragging and cursor mode when pausing, due to their shared use of the cursor with the pause screen.</p>
 							
-							<p>Finally, a brief demo has been made to practise using the current features in an environment more resembling a game than a testing-room.<br />
+							<p>At this point, a brief demo has been made to practise using the current features in an environment more resembling a game than a testing-room.<br />
 							This has been done using purpose-made assets, and has given good practise in using other parts of the engine.<br />
 							It has also helped to identify additional small issues or bugs in order to fix them, alongside needs like changing the capsule collision size for the player character to be suitable to a more cramped environment.</p>
 							
@@ -214,6 +224,19 @@
 								src="images/drawerdemogif.gif">
 							</iframe>
 							<p></p>
+							
+							<a id="dragging3-anchor">Object Carrying and Precision Placement:</a>
+							
+							<p>A key feature request following the new demo room and features was the ability to pick up and carry objects, in a way that did not disrupt other interaction mechanics.<br />
+							To achieve this, I started with an editor-changeable offset for holding a carried object below the centre of the screen using a physics handle. Interacting with a suitable object would toggle carrying it.<br />
+							This solved picking up and carrying an object whilst leaving the cursor free to interact with objects, open doors and so on.<br />
+							However, putting the object down was limited to interacting to drop it from its carrying position, which was unsuitable due to it typically dumping your object onto the floor.<br />
+							To solve this, I implemented a way of precisely positioning the object before releasing it.<br />
+							If dragging is initiated on the object, similar to moving doors and drawers, then the target position for the physics handle is set by the result of a raycast based on cursor position on the screen.<br />
+							The point of impact for the ray then has a further offset applied, in the direction of the surface normal of the ray-hit position. This helps to slightly float the object above a surface until it is released, and reduced unwanted collisions when moving the object around sharp corners.<br />
+							Other edge cases involving a lack of ray collision were accounted for as well, to prevent any unwanted behaviour.<br />
+							This solution has so far proven suitable, though I would like to explore any ways to further improve it. A video of this system can be found at the top of the page.</p>
+							
 							
 							<p>This project so far has been a great learning experience and has let me put what I have learned about UE5 into practice.<br />
 							I hope to continue expanding these features following the requirements of those using these mechanics.</p>
