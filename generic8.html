@@ -259,28 +259,47 @@
 							
 							<a id="terminal-anchor">Terminal System:</a>
 							
-							<p>After practise through the creation of a keypad, I set out to create a prototype of a terminal system through which a player could manually enter commands to alter or view their environment.<br />
-							This first version would allow for toggling between viewing camera feeds of different rooms. To create these camera feeds I used a Scene Capture Component 2D, attached to a mesh of a camera.<br />
-							Like in the previous keypad, I planned to use a Widget Component to make the terminal and camera monitor screens physical parts of the world instead of an unimmersive overlay over the player's view.<br />
-							I reused the inspection component seen in the first demo video both to better view the monitors, and to tell the monitor when to receive player input, through the use of delegates in the inspection component.<br />
-							The camera monitor widget utilises a widget switcher to alternate camera views, whilst the terminal widget utilises a scroll box of an additional widget which represents each line, containing it's text.<br />
-							During research after I had started work on this section, I found a wonderful 80 Level article by the devs of "Tartarus" about their work to create a terminal system in UE4.<br />
-							Whilst this guided my design of the terminal widget, I have achieved the rest of my end result quite differently to what they have described. Notably, all logic for my system has been written in C++, blueprint used only for the assignment of meshes to the actor, widget layout (over base C++ classes), and temporarily to direct key input to the actor.<br />
-							The aformentioned article described the use of a Scene Capture Component recording a widget component of the terminal, to then apply effects to the output of the capture component. This was described as producing a significant performance cost when in use, leading to optimisation measures.<br />
-							To avoid this costly method, especially when capture components are already in use for camera feeds, I achieved screen effects through using a Retainer Box in my widget layouts, using a specially made User Interface Material.<br />
-							As well as producing self-made textures for effects since recording, I intend to further expand on these effects to further imitate a CRT monitor.<br />
-							When the terminal is accessed, it begins receiving user input for the duration of inspection. Most logic is handled within the actor itself, due to it's interaction with two separate widgets for the terminal and camera view.<br />
-							Key presses provide their FKey to the actor, which may then be checked for fitting within a selection of "allowed" keys, appending the string of current user input, affecting it in the case of a backspace, or if enter is pressed, processing the current line.<br />
-							When a line is entered, the string is checked and any relevant functions are carried out, before a new line is created and the input string is reset, for use ad infinitum.<br />
-							Whilst some prototyping was carried out using blueprint, this has all been replaced with C++ for further expanding upon.<br />
-							So far, working to create this terminal has been great practise in problem solving and interface development, with various technical issues found and quickly resolved.</p>
-							
 							<iframe width="1200" height="680"
 								
 								  <source src="images/TerminalDemoClip.mp4" type="video/mp4">
 								
 							</iframe>
 							<p></p>
+							
+							<p>After the practise creating a keypad, I set out to create a prototype of a terminal system through which a player could manually enter commands to alter or view their environment.<br />
+							This first version would allow for toggling between viewing camera feeds of different rooms. To create these I used a Scene Capture Component.</p>
+							
+							<iframe width="600" height="340"
+								src="images/levercapturegif.gif">
+							</iframe>
+							
+							<p>Like in the previous keypad, I used a Widget Component to make the terminal and camera monitor screens physical parts of the world instead of an unimmersive overlay over the player's view.<br />
+							I reused the inspection component seen in the first demo video both to better view the monitors, and to tell the monitor when to receive player input, through the use of delegates in the inspection component.</p>
+							
+							<iframe width="600" height="340"
+								src="images/TerminalLeanGif.gif">
+							</iframe>
+							
+							<p>I used a widget switcher to alternate camera views on the camera monitor, then whilst investigating methods for the terminal, I found a wonderful 80 Level article by the devs of "Tartarus" about their work to create a terminal system in UE4.<br />
+							Following the lead of this guide, I made the terminal widget use a scroll box of an additional widget which represents each line, containing it's text.<br />
+							Whilst this guided my design of the terminal widget, I have achieved the rest of my end result quite differently to what they have described. Notably, all logic for my system has been written in C++, blueprint used only for the assignment of meshes to the actor, widget layout (over base C++ classes), and temporarily to direct key input to the actor.</p>
+							
+							<p>The aformentioned article described the use of a Scene Capture Component recording a widget component of the terminal, to then apply effects to the output of the capture component. This was described as producing a significant performance cost when in use, leading to optimisation measures.<br />
+							To avoid this costly method, especially when capture components are already in use for camera feeds, I achieved screen effects through using a Retainer Box in my widget layouts, using a specially made User Interface Material.<br />
+							As well as producing self-made textures for effects since recording, I intend to further expand on these effects to further imitate a CRT monitor.</p>
+							
+							<iframe width="600" height="340"
+								src="images/RetainerBox.png">
+							</iframe>
+							
+							<p>I handle the user input so that key presses provide their FKey to the actor, which may then be checked for fitting within a selection of "allowed" keys<br />
+							If the key is valid, it appends the user input string, removes a character if they press backspace, or enters the line.<br />
+							When a line is entered, the string is checked and any relevant functions are carried out, before a new line is created and the input string is reset, for use ad infinitum.</p>
+							
+							<p>Whilst some prototyping was carried out using blueprint, this has all been replaced with C++ for further expanding upon.<br />
+							I am currently working to expand on the systems functionality, such as accessing other non-line interfaces within the terminal.<br />
+							So far, working to create this terminal has been great practise in problem solving and interface development, with various technical issues found and quickly resolved.</p>
+							
 							
 							
 							<p>This project so far has been a great learning experience and has let me put what I have learned about UE5 into practice.<br />
