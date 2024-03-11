@@ -73,6 +73,7 @@
 								<li> <a href="#carry-anchor">Object Carrying and Precision Placement</a> </li>
 								<li> <a href="#breaker-anchor">Further Applications of Mechanics</a> </li>
 								<li> <a href="#terminal-anchor">Terminal System</a> </li>
+								<li> <a href="#dialogue-anchor">Dialogue System</a> </li>
 							</ul>
 							
 							<p>I am recording here my work with Unreal Engine 5 creating an interaction system, and the problem solving involved.<br />
@@ -282,7 +283,7 @@
 							
 							<p>I used a widget switcher to alternate camera views on the camera monitor, then whilst investigating methods for the terminal, I found a wonderful 80 Level article by the devs of "Tartarus" about their work to create a terminal system in UE4.<br />
 							Following the lead of this guide, I made the terminal widget use a scroll box of an additional widget which represents each line, containing it's text.<br />
-							Whilst this guided my design of the terminal widget, I have achieved the rest of my end result quite differently to what they have described. Notably, all logic for my system has been written in C++, blueprint used only for the assignment of meshes to the actor, widget layout (over base C++ classes), and temporarily to direct key input to the actor.</p>
+							Whilst this guided my design of the terminal widget, I have achieved the rest of my end result quite differently to what they have described. Notably, all logic for my system has been written in C++, blueprint used only for the assignment of meshes to the actor and widget layout (over base C++ classes).</p>
 							
 							<p>The aformentioned article described the use of a Scene Capture Component recording a widget component of the terminal, to then apply effects to the output of the capture component. This was described as producing a significant performance cost when in use, leading to optimisation measures.<br />
 							To avoid this costly method, especially when capture components are already in use for camera feeds, I achieved screen effects through using a Retainer Box in my widget layouts, using a specially made User Interface Material.<br />
@@ -299,6 +300,26 @@
 							<p>Whilst some prototyping was carried out using blueprint, this has all been replaced with C++ for further expanding upon.<br />
 							I am currently working to expand on the systems functionality, such as accessing other non-line interfaces within the terminal.<br />
 							So far, working to create this terminal has been great practise in problem solving and interface development, with various technical issues found and quickly resolved.</p>
+							
+							<a id="dialogue-anchor">Dialogue System:</a>
+							
+							<iframe width="1200" height="680"
+								
+								  <source src="images/ImprovedDialogueV1.mp4" type="video/mp4">
+								
+							</iframe>
+							<p></p>
+							
+							<p>I set out to create a dialogue system based around the use of intercoms, which would allow the player to communicate whilst nearby to them whilst leaving their hands free for other activity.<br />
+							Whilst the models especially, but also UI visuals are placeholder, I have completed the functional side of the first iteration of this system.</p>
+							
+							<p>I decided to try using data tables to hold the data of my branching dialogue. This allows the intercom to retrieve a dialogue entry, which will contain the dialogue text along with all options, their text and the data table locations of their following entries.<br />
+							The UI can then display that text in a typewriter-style, which I also applied to highlighting the player's response when it is selected, before the intercom moves to the next diaologue entry.<br />
+							This text highlighting was achieved through using Rich Text Blocks in the widget, for which the indicators for text style are inserted into the displayed text.</p> 
+							
+							<p>The intercom itself terminates dialogue if the player moves too far away after activation. To make this more intuitive, I added signal lights with multiple materials.<br />
+							One would light to warn the player is close to exiting the area of use, whilst the other may light to indicate use, but also flash to signal incoming messages.<br />
+							Because all intercoms within a level would assumedly be connected, the gamemode may store and update a "bookmark" position for what point to start dialogue from, updated by other happenings in-game or if a conversation is ended prematurely.</p>
 							
 							
 							
