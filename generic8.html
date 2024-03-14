@@ -74,6 +74,8 @@
 								<li> <a href="#breaker-anchor">Further Applications of Mechanics</a> </li>
 								<li> <a href="#terminal-anchor">Terminal System</a> </li>
 								<li> <a href="#dialogue-anchor">Dialogue System</a> </li>
+								<li> <a href="#dithering-anchor">Variable Colour Quantisation and Dithering</a> </li>
+								<li> <a href="#wheel-anchor">Accurate 3D Valve-Interaction</a> </li>
 							</ul>
 							
 							<p>I am recording here my work with Unreal Engine 5 creating an interaction system, and the problem solving involved.<br />
@@ -321,6 +323,48 @@
 							One would light to warn the player is close to exiting the area of use, whilst the other may light to indicate use, but also flash to signal incoming messages.<br />
 							Because all intercoms within a level would assumedly be connected, the gamemode may store and update a "bookmark" position for what point to start dialogue from, updated by other happenings in-game or if a conversation is ended prematurely.</p>
 							
+							
+							<a id="dithering-anchor">Variable Colour Quantisation and Dithering:</a>
+							
+							<p>This part of development presented an interesting challenge in the desire to emulate retro-graphics through the use of colour quantisation and dithering.<br />
+							I wanted to achieve this whilst preserving the fidelity of user interfaces like my terminals.</p>
+							
+							<p>To begin with, I implemented postprocessing to downsample the source image, and quantise the image colour.<br />
+							From here, I use Bayer noise to apply dithering to the quantisation values, helping to smooth the transition between quantised colours and create colour gradients.<br />
+							The quantisation number for each colour may be set individually, to help demonstrate the visual difference of different quantisation amounts, here is a blue block on a red brick floor, in which red has a notably increased quantisation number:</p>
+							
+							<iframe width="1200" height="680"
+								src="images/DitherColours.jpg">
+							</iframe>
+							
+							<p>From here, I decided to experiment with applying different amounts of downsampling and quantisation based on information in Unreal Engine's custom stencil buffer<br />
+							This way, I could selectively increase the fidelity of desired elements, such as user interfaces and objects that are currently in player focus.<br />
+							I found this method to work suitably, allowing UI elements to be presented in the same style as their surroundings but without harming their legibility.</p>
+							
+							<iframe width="1200" height="680"
+								src="images/VariableQuality.jpg">
+							</iframe>
+							<p></p>
+							
+							
+							<a id="wheel-anchor">Accurate 3D Valve-Interaction:</a>
+							
+							<iframe width="1200" height="680"
+								
+								  <source src="images/WheelTrimmed.mp4" type="video/mp4">
+								
+							</iframe>
+							<p></p>
+							
+							<p>As i expanded on my interaction system, I noted the need to interact with circular objects like valves.<br />
+							The existing method for hinged objects couldn't be applied to these, because the hinged objects rely on a vector indicating the "forward" direction that a door or lever is facing in.</p>
+							
+							<p>Hence, I set out to make a method that considers the player's mouse movement, relative to the point on the wheel by which they are holding it.<br />
+							This involved creating a vector perpendicular to the axis of rotation, moving from it to the point-of-holding. From this and the axis of rotation, a vector perpendicular to both can be created.<br />
+							This gives a vector that is tangential to the circle and perpendicular to the axis of rotation, by which to compare the player input direction against.</p>
+							
+							<p>This has worked perfectly, creating a wheel that will respond accurately to input based on the position of the wheel this force is applied from.<br />
+							Other factors like the number of possible rotations are all parameterised for ease-of-use.</p>
 							
 							
 							<p>This project so far has been a great learning experience and has let me put what I have learned about UE5 into practice.<br />
