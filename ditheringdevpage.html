@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Alex Knight Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css">
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									</span><span class="title">To Home Page</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
+							<li><a href="generic9.html">Unreal Engine C++ Key Features</a></li>
+							<li><a href="generic8.html">Unreal Engine C++ Progress Logs</a></li>
+							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
+							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="generic3.html">Team Project</a></li>							
+							<li><a href="generic2.html">Game Project</a></li>
+							<li><a href="generic.html">Graphics Project</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>Unreal Engine Five - Colour Quantisation and Dithering Development</h1>
+							
+							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<p></p>
+							<a href="generic8.html">To see all development summaries, click here.</a>
+							<p></p>
+							
+							<h2 id="terminal-anchor">Rendering - Dynamic Colour Quantisation and Dithering:</h2>
+							<iframe width="1200" height="680"
+								src="images/VariableQuality.jpg">
+							</iframe>
+							<p></p>
+							<h2 id="foundation-anchor">Initial Foundations:</h2>
+							
+							<p>For this feature, I set out to create a postprocessing method to emulate retro-graphics through the use of colour quantisation and dithering.<br />
+							I wanted to achieve this whilst preserving the fidelity of user interfaces like my terminals.</p>
+							
+							<p>To begin with, I implemented postprocessing to downsample the source image, and quantise the image colour.<br />
+							From here, I use Bayer noise to apply dithering to the quantisation values, helping to smooth the transition between quantised colours and create colour gradients.<br />
+							The quantisation number for each colour may be set individually, to help demonstrate the visual difference of different quantisation amounts, here is a blue block on a red brick floor, in which red has a notably increased quantisation number:</p>
+							
+							<iframe width="1200" height="680"
+								src="images/DitherColours.jpg">
+							</iframe>
+							
+							<p>From here, I decided to experiment with applying different amounts of downsampling and quantisation based on information in Unreal Engine's custom stencil buffer<br />
+							This way, I could selectively increase the fidelity of desired elements, such as user interfaces and objects that are currently in player focus.<br />
+							I found this method to work suitably, allowing UI elements to be presented in the same style as their surroundings but without harming their legibility.</p>
+							
+							<p>Whilst I have experience in writing rendering code from my Global Illumination Project, UE5 appeared oriented towards a node-based system for creating post-processing methods.<br />
+							Hence, I adapted my understanding to the required node-system, utilising material functions where possible in place of repeated-use functions.</p>
+							
+							<p>This presented some issues like a seeming lack of matrices within the editor, which I found solutions to such as the reading of a texture to provide the noise values used for dithering.</p>
+							
+							<iframe width="1200" height="680"
+								src="images/dithernodes.jpg">
+							</iframe>
+							<p></p>
+							
+							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<p></p>
+							<a href="generic8.html">To see all development summaries, click here.</a>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>My links</h2>
+								<ul class="icons">
+									<li><a href="https://github.com/Alex-R-Knight" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; Alex Knight | 2024 </li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			
+			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/cpp.js"></script>
+			<script>hljs.highlightAll();</script>
+
+	</body>
+</html>

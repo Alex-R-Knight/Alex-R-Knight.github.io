@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Alex Knight Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css">
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									</span><span class="title">To Home Page</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
+							<li><a href="generic9.html">Unreal Engine C++ Key Features</a></li>
+							<li><a href="generic8.html">Unreal Engine C++ Progress Logs</a></li>
+							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
+							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="generic3.html">Team Project</a></li>							
+							<li><a href="generic2.html">Game Project</a></li>
+							<li><a href="generic.html">Graphics Project</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>Unreal Engine Five - Dialogue System Testing</h1>
+							
+							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<p></p>
+							<a href="generic8.html">To see all development summaries, click here.</a>
+							<p></p>
+							
+							<h2 id="terminal-anchor">Mechanic - Branching Dialogue System:</h2>
+							<iframe width="1200" height="680"
+								
+								  <source src="images/ImprovedDialogueV1.mp4" type="video/mp4">
+								
+							</iframe>
+							<p></p>
+							<h2 id="foundation-anchor">Initial Foundations:</h2>
+							
+							<p>I set out to create a dialogue system based around the use of intercoms, which would allow the player to communicate whilst nearby to them whilst leaving their hands free for other activity.<br />
+							Whilst the models especially, but also UI visuals are placeholder, I have completed the functional side of the first iteration of this system.</p>
+							
+							<p>I decided to try using data tables to hold the data of my branching dialogue. This allows the intercom to retrieve a dialogue entry, which will contain the dialogue text along with all options, their text and the data table locations of their following entries.<br />
+							The UI can then display that text in a typewriter-style, which I also applied to highlighting the player's response when it is selected, before the intercom moves to the next diaologue entry.<br />
+							This text highlighting was achieved through using Rich Text Blocks in the widget, for which the indicators for text style are inserted into the displayed text.</p> 
+							
+							<p>The intercom itself terminates dialogue if the player moves too far away after activation. To make this more intuitive, I added signal lights with multiple materials.<br />
+							One would light to warn the player is close to exiting the area of use, whilst the other may light to indicate use, but also flash to signal incoming messages.<br />
+							Because all intercoms within a level would assumedly be connected, the gamemode may store and update a "bookmark" position for what point to start dialogue from, updated by other happenings in-game or if a conversation is ended prematurely.</p>
+							
+							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<p></p>
+							<a href="generic8.html">To see all development summaries, click here.</a>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>My links</h2>
+								<ul class="icons">
+									<li><a href="https://github.com/Alex-R-Knight" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; Alex Knight | 2024 </li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			
+			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/cpp.js"></script>
+			<script>hljs.highlightAll();</script>
+
+	</body>
+</html>

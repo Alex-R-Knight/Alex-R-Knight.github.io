@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Alex Knight Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css">
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									</span><span class="title">To Home Page</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
+							<li><a href="generic9.html">Unreal Engine C++ Key Features</a></li>
+							<li><a href="generic8.html">Unreal Engine C++ Progress Logs</a></li>
+							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
+							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="generic3.html">Team Project</a></li>							
+							<li><a href="generic2.html">Game Project</a></li>
+							<li><a href="generic.html">Graphics Project</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>Unreal Engine Five - Terminal System Development</h1>
+							
+							<p>Key points in feature development:</p>
+
+							<ul>
+								<li> <a href="#foundation-anchor">Initial Foundations</a> </li>
+								<li> <a href="#input-anchor">Input Handling</a> </li>
+								<li> <a href="#keyboard-anchor">Interactive Keyboard</a> </li>
+								<li> <a href="#string-anchor">Advanced Command Processing</a> </li>
+								<li> <a href="#input2-anchor">Advanced Input Control</a> </li>								
+							</ul>
+							
+							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<p></p>
+							<a href="generic8.html">To see all development summaries, click here.</a>
+							<p></p>
+							
+							<h2 id="terminal-anchor">Mechanic - Interactive Terminal System:</h2>
+							<iframe width="1200" height="680"
+								
+								  <source src="images/TerminalPageDemoClip.mp4" type="video/mp4">
+								
+							</iframe>
+							<p></p>
+							<h2 id="foundation-anchor">Initial Foundations:</h2>
+							
+							<p>After practise through creating a keypad system, I set out to create a prototype of a terminal system through which a player could manually enter commands to alter or view their environment.<br />
+							This first version would allow for toggling between viewing camera feeds of different rooms. To create these I used a Scene Capture Component.</p>
+							
+							<iframe width="600" height="340"
+								src="images/levercapturegif.gif">
+							</iframe>
+							
+							<p>Like in the previous keypad, I used a Widget Component to make the terminal and camera monitor screens physical parts of the world instead of an unimmersive overlay over the player's view.<br />
+							I used an inspection component from my interaction system both to better view the monitors, and to tell the monitor when to receive player input, through the use of delegates in the inspection component.</p>
+							
+							<iframe width="600" height="340"
+								src="images/TerminalLeanGif.gif">
+							</iframe>
+							
+							<p>I used a widget switcher to alternate camera views on the camera monitor, then whilst investigating methods for the terminal, I found a wonderful 80 Level article by the devs of "Tartarus" about their work to create a terminal system in UE4.<br />
+							Following the lead of this guide, I made the terminal widget use a scroll box of an additional widget which represents each line, containing it's text.<br />
+							Whilst this guided my design of the terminal widget, I have achieved the rest of my end result quite differently to what they have described. Notably, all logic for my system has been written in C++, blueprint used only for the assignment of meshes to the actor and widget layout (over base C++ classes).</p>
+							
+							<p>The aformentioned article described the use of a Scene Capture Component recording a widget component of the terminal, to then apply effects to the output of the capture component. This was described as producing a significant performance cost when in use, leading to optimisation measures.<br />
+							To avoid this costly method, especially when capture components are already in use for camera feeds, I achieved screen effects through using a Retainer Box in my widget layouts, using a specially made User Interface Material.<br />
+							As well as producing self-made textures for effects since recording the shown footage, I intend to further expand on these effects to further imitate a CRT monitor.</p>
+							
+							<iframe width="600" height="340"
+								src="images/RetainerBox.jpg">
+							</iframe>
+							
+							<h2 id="input-anchor">Input Handling:</h2>
+							
+							<p>I handled the user input so that key presses provide their FKey to the actor, which may then be checked for fitting within a selection of "allowed" keys<br />
+							If the key is valid, it appends the user input string, removes a character if they press backspace, or enters the line.<br />
+							When a line is entered, the string is checked and any relevant functions are carried out, before a new line is created and the input string is reset, for use ad infinitum.</p>
+							
+							<p>Whilst some prototyping was carried out using blueprint, this has all been replaced with C++ for further expansion by this stage.</p>
+							
+							<h2 id="keyboard-anchor">Interactive Keyboard:</h2>
+							
+							<iframe width="600" height="340"
+								src="images/terminalindexgif.gif">
+							</iframe>
+							
+							<p>As a vision for a gameplay demo centred around terminal usage developed, greater requirements for the terminal system were found.<br />
+							The first of these was an interactive keyboard, that could both respond to player key presses, and deliver them if interacted with directly.</p>
+							
+							<p>This was handled through the addition of a keyboard which would on game start create keys from a given TArray of references.<br />
+							When the terminal received input, any FKey matching a corresponding physical key would trigger movement, likewise key interaction would deliver the FKey to the terminal.</p>
+												
+<pre>
+<code class="cpp-html">
+const FActorSpawnParameters ActorSpawnParams;
+
+const FTransform SpawnTransform = KeyboardMesh->GetComponentTransform();
+
+for (auto& ButtonKeyReference: ButtonKeyReferences)
+{
+	AKeyboardButton* NewKey = GetWorld()->SpawnActor<AKeyboardButton>(ButtonKeyReference, SpawnTransform, ActorSpawnParams);
+
+	NewKey->ButtonComponent->OnButtonKey.AddUObject(this, &AMonitorStation::OnKeyInput);
+
+	ButtonKeys.Add(NewKey);
+}
+</code>
+</pre>
+
+							<h2 id="string-anchor">Advanced Command Processing:</h2>
+							
+							<p>The terminals ability to process commands was improved, as to accurately point out the incorrect parameter in commands should they be invalid.<br />
+							A key part of this was a reusable function to verify that an input string either consisted purely of, or began with a given parameter.<br />
+							If this were the case, then this parameter may be chopped from the start of the string, in order to verify the next parameter.</p>
+							
+<pre>
+<code class="cpp-html">
+if ( ( ProcessString.StartsWith(ParameterString) && ProcessString.Len() == ParameterString.Len() ) || ProcessString.StartsWith(ParameterString.Append(TEXT(" "))) )
+{
+	return true;
+}
+return false;
+</code>
+</pre>
+
+							<h2 id="input2-anchor">Advanced Input Control:</h2>
+							
+							<p>As the arrow keys were freed for use by the changing of the terminal manual to an interaction-based system instead of arrow-controls, they could be repurposed.<br />
+							Hence, the abilities were added to recall previously entered commands, and to move through the current command to add or remove characters at any position.</p>
+							
+							<p>This was achieved by altering the command-line widget to consist of two text blocks on either side of the line's cursor.<br />
+							Whilst the key user input string would remain stored as normal, any update to the displayed text would split it into the characters on either side of the cursor, to set as the text of these text blocks.</p>
+
+<pre>
+<code class="cpp-html">
+FString FirstString = TextIn.Left(CursorPosition);
+if (CursorPosition == 0) FirstString = "";
+SetInputText(FirstString);
+
+FString SecondString = TextIn.RightChop(CursorPosition);
+SetLatterText(SecondString);
+</code>
+</pre>
+						
+							<p>After this, arrow key functionality was added so that the left and right keys would move the cursor across the current line.<br />
+							This cursor position would dictate the position about which characters are added or removed via key inputs.</p>
+							
+<pre>
+<code class="cpp-html">
+if (CursorPosition < UserInputString.Len()) CursorPosition++;
+TerminalWidget->CurrentTerminalLine->SetDividedText(UserInputString, CursorPosition);
+</code>
+</pre>
+						
+							<p>So far, working to create this terminal has been great practise in problem solving and interface development, with various technical issues found and quickly resolved.</p>
+							
+							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<p></p>
+							<a href="generic8.html">To see all development summaries, click here.</a>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>My links</h2>
+								<ul class="icons">
+									<li><a href="https://github.com/Alex-R-Knight" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; Alex Knight | 2024 </li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			
+			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/cpp.js"></script>
+			<script>hljs.highlightAll();</script>
+
+	</body>
+</html>

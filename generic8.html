@@ -42,7 +42,7 @@
 							<li><a href="index.html">Home</a></li>
 							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
 							<li><a href="generic9.html">Unreal Engine C++ Key Features</a></li>
-							<li><a href="generic8.html">Unreal Engine C++ Progress Log</a></li>
+							<li><a href="generic8.html">Unreal Engine C++ Progress Logs</a></li>
 							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
 							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
 							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
@@ -55,339 +55,78 @@
 				<!-- Main -->
 					<div id="main">
 						<div class="inner">
-							<h1>Unreal Engine Five - C++ Development - All Progress</h1>
+							<h1>Unreal Engine Five - C++ Development - Feature Hub</h1>
 							
 							<p>Building on previous UE5 learning to create mechanics in the engine using C++ to given requirements.</p>
 							
-							<h2>In Chronological Order:</h2>
-
-							<ul>
-								<li> <a href="#foundation-anchor">Initial Foundations</a> </li>
-								<li> <a href="#iteration1-anchor">First design iteration – Mouse/Cursor Interaction</a> </li>
-								<li> <a href="#dragging1-anchor">First Implementation of Object Dragging</a> </li>
-								<li> <a href="#dragging2-anchor">Object Dragging – Momentum</a> </li>
-								<li> <a href="#highlight1-anchor">Object Highlight Improvements</a> </li>
-								<li> <a href="#demo-anchor">First Demo Video</a> </li>
-								<li> <a href="#dragging3-anchor">Object Dragging Input Expansion</a> </li>
-								<li> <a href="#cursor-anchor">Mouse Cursor Following Points in 3D Space</a> </li>
-								<li> <a href="#dragging3-anchor">Further Improvement of Draggable Object Movement</a> </li>
-								<li> <a href="#carry-anchor">Object Carrying and Precision Placement</a> </li>
-								<li> <a href="#breaker-anchor">Further Applications of Mechanics</a> </li>
-								<li> <a href="#terminal-anchor">Terminal System</a> </li>
-								<li> <a href="#dialogue-anchor">Dialogue System</a> </li>
-								<li> <a href="#dithering-anchor">Variable Colour Quantisation and Dithering</a> </li>
-								<li> <a href="#wheel-anchor">Accurate 3D Valve-Interaction</a> </li>
-								<li> <a href="#page-anchor">3D-Interactive Books</a> </li>
-							</ul>
+							
 							
 							<a href="generic9.html">For a summary of key features, click here.</a>
-							<p>I am recording here my work with Unreal Engine 5 creating an interaction system, and the problem solving involved.<br />
-							This has been done in C++, and made following feature requests from a friend, whilst I design features for ease of use in the engine by a user not familiar with C++.</p>							
+							<p>I am recording here my work with Unreal Engine 5 creating mechanics such as an interaction system, and the problem solving involved.<br />
+							This has been done in C++, and made following feature requests from a friend, whilst I design features for ease of use in the engine by a user not familiar with C++.</p>
+
+							<p>Please select a feature to read about its development.</p>
 							
 							
-							<h2>New Primary Demo Footage - Writing Below:</h2>
-							<iframe width="1200" height="680"
+							<section class="tiles">
 								
-								  <source src="images/ShortenedDemoClip.mp4" type="video/mp4">
+								<article class="style6">
+									<span class="image">
+										<img src="images/drawerdemoindexgif.gif" alt="" />
+									</span>
+									<a href="generic7.html">
+										<h2>Interaction System<br />
+										Development Log</h2>
+										<div class="content">
+											<p>A core interaction system utilising 3D manipulation.</p>
+										</div>
+									</a>
+								</article>
 								
-							</iframe>
-							<p></p>
-							
-							
-							<h2>Secondary Demo Footage:</h2>
-							<iframe width="1200" height="680"
+								<article class="style5">
+									<span class="image">
+										<img src="images/terminalindexgif.gif" alt="" />
+									</span>
+									<a href="generic9.html">
+										<h2>Interactive Terminal<br />
+										Development Log</h2>
+										<div class="content">
+											<p>An interactive terminal to affect the environment.</p>
+										</div>
+									</a>
+								</article>
 								
-								  <source src="images/NewDemoVideo.mp4" type="video/mp4">
+								<article class="style5">
+									<span class="image">
+										<img src="images/ditherindex.jpg" alt="" />
+									</span>
+									<a href="generic9.html">
+										<h2>Dynamic Colour Quantisation<br />
+										And Dithering</h2>
+										<div class="content">
+											<p>A retro shading approach with modern quality features.</p>
+										</div>
+									</a>
+								</article>
 								
-							</iframe>
-							<p></p>
-							
-							<h2>Secondary Demo Footage - Precision Object Placement:</h2>
-							<iframe width="1200" height="680"
+								<article class="style5">
+									<span class="image">
+										<img src="images/dialogueindexgif.gif" alt="" />
+									</span>
+									<a href="generic9.html">
+										<h2>Dialogue System<br />
+										Prototyping</h2>
+										<div class="content">
+											<p>Mechanical prototyping of a branching dialogue system.</p>
+										</div>
+									</a>
+								</article>
 								
-								  <source src="images/UpdatedCarryDragDemoClip.mp4" type="video/mp4">
-								
-							</iframe>
+							</section>
+							
 							<p></p>
-							
-							
-							<a id="foundation-anchor">Initial Foundations:</a>
-							
-							<p>My first steps to developing the interaction system were to create a scene component attached to the player character’s camera to handle player-side logic. This would use raycasts to find the actor being looked at by the player, and check if this actor contained an interactor component-derived class or children of this class. These interactor component child classes will contain overrides of an interact function, to contain all interaction logic for the object.<br />
-							A highlight effect is applied to interactable objects when they are looked at, confirming them as the currently “locked in” interactable. The locked in interactable is changed either when the player looks at a new interactable object, or if they are not looking directly at any acceptable objects for a sufficient amount of time.<br />
-							This was done for player convenience, to reduce the effect of misinputs like slightly overshooting an object with the mouse before pressing the interact key. The time for this deselection was made a value accessible and changeable in the editor, for ease of adjustment.</p>
-							
-							<iframe width="600" height="340"
-								src="images/objecthighlightgif.gif">
-							</iframe>
-							
-							<p>The first implemented forms of interaction were an interactor component child class that would send a message to the player when used. This appeared to be a reasonable and uncomplicated starting point. For this the means to add a message widget to the player screen was added, through a function taking both the text to display and the time it should display for as parameters.<br />
-							This created a problem of rapid interaction potentially displaying multiple instances of the widget to the screen at the same time, which was solved by instead keeping only one instance of the widget in use at any one time, which is deleted and replaced if the function is called again.<br />
-							Other functionality such as an object that would interpolate into a position in front of the player’s view, and allow free rotation to inspect and interact with details, was tested and whilst it did not survive into later versions, features such as switching to mouse cursor-based interaction would be reused.</p>
-							
-							<a id="iteration1-anchor">First design iteration – Mouse/Cursor Interaction:</a>
-							
-							<p>After the foundational steps, the first feedback and design requests were given. The major feature to be added was the ability to toggle between ordinary mouse controls, and aiming at an object to interact with it, and replacing mouse-turning with a mouse cursor, which could hover over objects in order to select and interact with them.</p>
-							
-							<p>My approach to this was to add a widget of toggleable visibility for the cursor, in place of toggling the real mouse cursor’s visibility. This was done so that I could build upon this to add features such as context-sensitive changing of the cursor icon more easily.<br />
-							Cursor-mode is activated and deactivated through the holding and release of a key, and for its duration the ordinary mouse input to the player character for looking is disabled. The cursor would fire rays for interactable object detection based on its position on the screen.</p>
-							
-							<p>Once the cursor mode was implemented, I added the means for the cursor icon to change based on the type of interactable object that was locked in for interaction. This was achieved by adding a function to the interactor classes that would be called upon locking in of the selector. Each interactor child class could then set the relevant cursor icon from a selection within the widget, and carry out any other necessary actions.<br />
-							Finally, to allow for a degree of camera rotation whilst in cursor mode, I implemented a check whilst in cursor mode that would apply rotation if the cursor was sufficiently close to any edge of the screen within editor-set boundaries, enabling deliberate rotation by the player.</p>
-							
-							<iframe width="600" height="340"
-								src="images/cursoricons.gif">
-							</iframe>
+							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
-							
-							<a id="dragging1-anchor">First Implementation of Object Dragging:</a>
-							
-							<p>The key feature request after the implementation of a cursor mode was the ability to drag objects, such as draws and hinged doors. This feature would be heavily iterated upon.<br />
-							First, a parent draggable interactor class was made to hold the dragging logic shared between all draggable objects. This would handle all but the actual movement of the object, for which specific child classes would be made for different movement types.<br />
-							Dragging would be initiated by the holding of the interact button whilst a draggable object is locked in. I was using Unreal Engine’s Enhanced Input Action Mapping, which allowed for easy discerning between a tap or hold of the same key for different purposes.</p>
-							
-							<p>These draggable interactors would receive an input vector and use a dot product to compare this vector against its object’s direction vector. The greater the two vectors align, the more the interactor will move forwards or backwards between its two end-points of movement, leading to movement in the direction of one of these end points.<br />
-							In this first implementation, the input vector would come purely from mouse movement, in either standard or cursor mode. The vector was produced using the player camera, and by extension its interactor component’s up and right vectors multiplied by mouse input values.<br />
-							This produced a problem in that if the player’s view aligned enough with the object direction vector, then input could only be given in directions that would not induce movement.<br />
-							To solve this, I produced a second input vector that turned mouse up/down movement into the forwards/backwards direction and mixed these two input vectors based on a dot product of the player camera forward vector and the draggable object direction vector. Hence, the more the player view and direction vector align, the more the alternate vector is used for drag-input instead, solving the problem.</p>
-							
-							<iframe width="342" height="200"
-								src="images/dragging.gif">
-							</iframe>
-							<p></p>
-							
-							<p>This first implementation marked a milestone in progress, but also highlighted several problems to me, such as the current highlighting method showing the object through other surfaces, but also the way in which cursor movement did not properly match the movement of the object being dragged. Furthermore, there was a lack of momentum within dragged objects if they were released mid-movement.</p>
-							
-							
-							<a id="dragging2-anchor">Object Dragging – Momentum:</a>
-							
-							<p>To achieve the impression of momentum in dragged objects, I made the draggable interactor class record its last change in progress between end-points, and if dragging ceases, to instead move itself using this recorded value, which will decrease towards zero over time based on a given deceleration rate.<br />
-							This initially caused issues due to this value only updating when input was received, which it could then act on even if the object had come to a stop before the dragging was terminated. Hence, a check was added to remove this momentum value if the object became stationary whilst being dragged.</p>
-							
-							<iframe width="600" height="340"
-								src="images/momentum.gif">
-							</iframe>
-							<p></p>
-							
-							<a id="highlight1-anchor">Object Highlight Improvements:</a>
-							
-							<p>The initial object highlight method was functional but found unsuitable due to it highlighting the entire object, including that which was behind other geometry.<br />
-							This method uses UE5’s custom depth buffer, in which only highlightable objects have rendering their custom depth enabled, the buffer then being used for a simple edge detection method comparing the presence or lack thereof of custom depth buffer values.<br />
-							To improve upon this, I added the sampling of the standard depth buffer, and its comparison with the custom depth buffer in order to consider only parts of the object that were unoccluded by other geometry.<br />
-							This has proven successful, and is the current object highlight method in use.</p>
-							
-							<span class="image main"><img src="images/outlines.jpg" alt="" /></span>
-							
-							<a id="dragging3-anchor">Object Dragging Input Expansion:</a>
-							
-							<p>Whilst mouse input had been suitable adjusted for use controlling dragging, it was decided to also factor player movement whilst dragging into the movement of the object.<br />
-							Hence, player movement input would also send input vectors to the draggable interactor derived from the input combined with the player character forward and right vectors.<br />
-							This, along with all other input, would be multiplied by values changeable within the editor for easy adjustment of sensitivity to different input types. These could also be used to alter drag input/player movement speed depending on both the cursor mode and if dragging was underway.</p>
-							
-							<a id="cursor-anchor">Mouse Cursor Following Points in 3D Space:</a>
-							
-							<p>To solve the lack of correlation between draggable object and mouse cursor movement, significant changes had to be made.<br />
-							Firstly, a second cursor widget was created purely for dragging objects. Whenever a draggable object is locked in for interaction, the last point of contact between the player and the object is saved.<br />
-							When dragging is initiated, this point of contact is turned into an offset relative to the dragged object, as to follow it as it moves. This point of contact in world space may then be translated into a screen space position, used to set the location of the dragging cursor widget.<br />
-							Hence, this cursor will accurately stick to the dragged object in the place it was grabbed for as long as it is held.<br />
-							When dragging is terminated, the standard cursor widget resumes use. This initially caused an issue in that the cursor would reappear in the real mouse cursor’s position on-screen, which was not where the dragging cursor was last visible.<br />
-							To solve this, when dragging is terminated, the same screen-space position used to set the position of the dragging cursor is used to set the position of the mouse, and by extension the cursor widget that follows it.</p>
-							
-							<iframe width="600" height="340"
-								src="images/dragcursor.gif">
-							</iframe>
-							<p></p>
-							
-							<a id="demo-anchor">First Demo Video:</a>
-							
-							<p>A video was made at this stage, which also shows some other features such as the ability to inspect an area in order to interact with finer details.</p>
-							
-							<iframe width="1200" height="680"
-								
-								  <source src="images/DemoVideo.mp4" type="video/mp4">
-								
-							</iframe>
-							<p></p>
-							
-							<a id="dragging3-anchor">Further Improvement of Draggable Object Movement:</a>
-							
-							<p>To create a smoother and more "weighty" reponse in draggable objects, I tested a new way of handling object movement.<br />
-							Where previously object momentum was reserved for movement after the player had released the object, it would now be the sole driving force in moving the object, where the player contributes to it via input, and the momentum naturally moves towards zero.<br />
-							During the implementation of this new method, I also improved on a previous design choice, by moving all input multipliers for different player conditions from the player character to the draggable object, allowing for better fine tuning of individual objects.<br />
-							This, after the tweaking of some parameters, produced smoother and overall better object movement.</p>
-							
-							<iframe width="800" height="600"
-								src="images/improvedswinggif.gif">
-							</iframe>
-							<p></p>
-							
-							<p>I also reenabled the player rotation from the cursor being close to the edge of the screen for dragging, because this produced smoother movement and allowed the player to continue to follow an object better.<br />
-							The rate of rotation was also changed to increase the closer the cursor gets to the edge, to create smoother movement compared to the original "on/off" state of turning.</p>
-							
-							<iframe width="600" height="340"
-								src="images/cursordrift.gif">
-							</iframe>
-							<p></p>
-							
-							<p>After this, I set about implementing basic UI features like a pause screen, start menu and options menu. These are not final, but rather implemented in this state for ease of testing, and because having no proper way to close the game when testing a packaged version was inconvenient. <br />
-							Some minor problem solving was required, such as opting to terminate dragging and cursor mode when pausing, due to their shared use of the cursor with the pause screen.</p>
-							
-							<p>At this point, a brief demo has been made to practise using the current features in an environment more resembling a game than a testing-room.<br />
-							This has been done using purpose-made assets, and has given good practise in using other parts of the engine.<br />
-							It has also helped to identify additional small issues or bugs in order to fix them, alongside needs like changing the capsule collision size for the player character to be suitable to a more cramped environment.</p>
-							
-							<iframe width="600" height="340"
-								src="images/drawerdemogif.gif">
-							</iframe>
-							<p></p>
-							
-							<a id="dragging3-anchor">Object Carrying and Precision Placement:</a>
-							
-							<p>A key feature request following the new demo room and features was the ability to pick up and carry objects, in a way that did not disrupt other interaction mechanics.<br />
-							To achieve this, I started with an editor-changeable offset for holding a carried object below the centre of the screen using a physics handle. Interacting with a suitable object would toggle carrying it.<br />
-							This solved picking up and carrying an object whilst leaving the cursor free to interact with objects, open doors and so on.<br />
-							However, putting the object down was limited to interacting to drop it from its carrying position, which was unsuitable due to it typically dumping your object onto the floor.<br />
-							To solve this, I implemented a way of precisely positioning the object before releasing it.<br />
-							If dragging is initiated on the object, similar to moving doors and drawers, then the target position for the physics handle is set by the result of a raycast based on cursor position on the screen.<br />
-							The point of impact for the ray then has a further offset applied, in the direction of the surface normal of the ray-hit position. This helps to slightly float the object above a surface until it is released, and reduced unwanted collisions when moving the object around sharp corners.<br />
-							Other edge cases involving a lack of ray collision were accounted for as well, to prevent any unwanted behaviour.<br />
-							This solution has so far proven suitable, though I would like to explore any ways to further improve it. A video of this system can be found at the top of the page.</p>
-							
-							
-							<a id="breaker-anchor">Further Applications of Mechanics:</a>
-							
-							<p>Following the completion of previous features, I set out to build on them so that they can be used to affect their environment, and be used to create interaction puzzles.<br />
-							The first step was to improve the components that add dragging logic to objects like draws and doors, to define the limits of and recognise when an object enters or exits its limits of movement.<br />
-							This allowed the component to be used for objects such as levers or breaker switches. Whilst initial testing of this was done using event dispatchers, I have switched to the use of delegates in C++ to remove blueprint use in game logic.<br />
-							After this, a testing scene was made using the new functionality on a breaker switch, to toggle the power to a room's lighting and a keypad needed to unlock a door.<br />
-							This keypad utilises a widget component, in which all widget logic was done in C++. The keypad was made both for creating a device interacted with in the game world instead of reducing player immersion through filling the screen with a buttoned widget, but also to begin practise for the following feature.</p>
-							
-							
-							<a id="terminal-anchor">Terminal System:</a>
-							
-							<iframe width="1200" height="680"
-								
-								  <source src="images/TerminalDemoClip.mp4" type="video/mp4">
-								
-							</iframe>
-							<p></p>
-							
-							<p>After the practise creating a keypad, I set out to create a prototype of a terminal system through which a player could manually enter commands to alter or view their environment.<br />
-							This first version would allow for toggling between viewing camera feeds of different rooms. To create these I used a Scene Capture Component.</p>
-							
-							<iframe width="600" height="340"
-								src="images/levercapturegif.gif">
-							</iframe>
-							
-							<p>Like in the previous keypad, I used a Widget Component to make the terminal and camera monitor screens physical parts of the world instead of an unimmersive overlay over the player's view.<br />
-							I reused the inspection component seen in the first demo video both to better view the monitors, and to tell the monitor when to receive player input, through the use of delegates in the inspection component.</p>
-							
-							<iframe width="600" height="340"
-								src="images/TerminalLeanGif.gif">
-							</iframe>
-							
-							<p>I used a widget switcher to alternate camera views on the camera monitor, then whilst investigating methods for the terminal, I found a wonderful 80 Level article by the devs of "Tartarus" about their work to create a terminal system in UE4.<br />
-							Following the lead of this guide, I made the terminal widget use a scroll box of an additional widget which represents each line, containing it's text.<br />
-							Whilst this guided my design of the terminal widget, I have achieved the rest of my end result quite differently to what they have described. Notably, all logic for my system has been written in C++, blueprint used only for the assignment of meshes to the actor and widget layout (over base C++ classes).</p>
-							
-							<p>The aformentioned article described the use of a Scene Capture Component recording a widget component of the terminal, to then apply effects to the output of the capture component. This was described as producing a significant performance cost when in use, leading to optimisation measures.<br />
-							To avoid this costly method, especially when capture components are already in use for camera feeds, I achieved screen effects through using a Retainer Box in my widget layouts, using a specially made User Interface Material.<br />
-							As well as producing self-made textures for effects since recording, I intend to further expand on these effects to further imitate a CRT monitor.</p>
-							
-							<iframe width="600" height="340"
-								src="images/RetainerBox.jpg">
-							</iframe>
-							
-							<p>I handle the user input so that key presses provide their FKey to the actor, which may then be checked for fitting within a selection of "allowed" keys<br />
-							If the key is valid, it appends the user input string, removes a character if they press backspace, or enters the line.<br />
-							When a line is entered, the string is checked and any relevant functions are carried out, before a new line is created and the input string is reset, for use ad infinitum.</p>
-							
-							<p>Whilst some prototyping was carried out using blueprint, this has all been replaced with C++ for further expanding upon.<br />
-							I am currently working to expand on the systems functionality, such as accessing other non-line interfaces within the terminal.<br />
-							So far, working to create this terminal has been great practise in problem solving and interface development, with various technical issues found and quickly resolved.</p>
-							
-							<a id="dialogue-anchor">Dialogue System:</a>
-							
-							<iframe width="1200" height="680"
-								
-								  <source src="images/ImprovedDialogueV1.mp4" type="video/mp4">
-								
-							</iframe>
-							<p></p>
-							
-							<p>I set out to create a dialogue system based around the use of intercoms, which would allow the player to communicate whilst nearby to them whilst leaving their hands free for other activity.<br />
-							Whilst the models especially, but also UI visuals are placeholder, I have completed the functional side of the first iteration of this system.</p>
-							
-							<p>I decided to try using data tables to hold the data of my branching dialogue. This allows the intercom to retrieve a dialogue entry, which will contain the dialogue text along with all options, their text and the data table locations of their following entries.<br />
-							The UI can then display that text in a typewriter-style, which I also applied to highlighting the player's response when it is selected, before the intercom moves to the next diaologue entry.<br />
-							This text highlighting was achieved through using Rich Text Blocks in the widget, for which the indicators for text style are inserted into the displayed text.</p> 
-							
-							<p>The intercom itself terminates dialogue if the player moves too far away after activation. To make this more intuitive, I added signal lights with multiple materials.<br />
-							One would light to warn the player is close to exiting the area of use, whilst the other may light to indicate use, but also flash to signal incoming messages.<br />
-							Because all intercoms within a level would assumedly be connected, the gamemode may store and update a "bookmark" position for what point to start dialogue from, updated by other happenings in-game or if a conversation is ended prematurely.</p>
-							
-							
-							<a id="dithering-anchor">Variable Colour Quantisation and Dithering:</a>
-							
-							<p>This part of development presented an interesting challenge in the desire to emulate retro-graphics through the use of colour quantisation and dithering.<br />
-							I wanted to achieve this whilst preserving the fidelity of user interfaces like my terminals.</p>
-							
-							<p>To begin with, I implemented postprocessing to downsample the source image, and quantise the image colour.<br />
-							From here, I use Bayer noise to apply dithering to the quantisation values, helping to smooth the transition between quantised colours and create colour gradients.<br />
-							The quantisation number for each colour may be set individually, to help demonstrate the visual difference of different quantisation amounts, here is a blue block on a red brick floor, in which red has a notably increased quantisation number:</p>
-							
-							<iframe width="1200" height="680"
-								src="images/DitherColours.jpg">
-							</iframe>
-							
-							<p>From here, I decided to experiment with applying different amounts of downsampling and quantisation based on information in Unreal Engine's custom stencil buffer<br />
-							This way, I could selectively increase the fidelity of desired elements, such as user interfaces and objects that are currently in player focus.<br />
-							I found this method to work suitably, allowing UI elements to be presented in the same style as their surroundings but without harming their legibility.</p>
-							
-							<iframe width="1200" height="680"
-								src="images/VariableQuality.jpg">
-							</iframe>
-							<p></p>
-							
-							
-							<a id="wheel-anchor">Accurate 3D Valve-Interaction:</a>
-							
-							<iframe width="1200" height="680"
-								
-								  <source src="images/RealDoor.mp4" type="video/mp4">
-								
-							</iframe>
-							<p></p>
-							
-							<p>As i expanded on my interaction system, I noted the need to interact with circular objects like valves.<br />
-							The existing method for hinged objects couldn't be applied to these, because the hinged objects rely on a vector indicating the "forward" direction that a door or lever is facing in.</p>
-							
-							<p>Hence, I set out to make a method that considers the player's mouse movement, relative to the point on the wheel by which they are holding it.<br />
-							This involved creating a vector perpendicular to the axis of rotation, moving from it to the point-of-holding. From this and the axis of rotation, a vector perpendicular to both can be created.<br />
-							This gives a vector that is tangential to the circle and perpendicular to the axis of rotation, by which to compare the player input direction against.</p>
-							
-							<p>This has worked perfectly, creating a wheel that will respond accurately to input based on the position of the wheel this force is applied from.<br />
-							Other factors like the number of possible rotations are all parameterised for ease-of-use.</p>
-							
-							
-							<a id="page-anchor">3D-Interactive Books:</a>
-							
-							<iframe width="1200" height="680"
-								
-								  <source src="images/InteractiveBookDemo.mp4" type="video/mp4">
-								
-							</iframe>
-							<p></p>
-							
-							<p>As a gameplay demo based around terminal usage developed, the need for a manual developed.<br />
-							The first step was the creation of an interaction component for interpolating into an "active" position, with ability for interruption to smoothen usage.</p>
-							
-							<p>The first manual iteration changed pages through arrow key usage, which was functional but unsuitable as these keys were to be used by the terminal.<br />
-							Hence, a second version was developed with 3D, physically turned pages using the interaction system., and capable of pushing each other.</p>
-							
-							<p>This has proven suitable, and allows for more immersive interaction whilst freeing keys for use by the terminal</p>
-							
-							
 							
 							<p>This project so far has been a great learning experience and has let me put what I have learned about UE5 into practice.<br />
 							I hope to continue expanding these features following the requirements of those using these mechanics.</p>
