@@ -133,9 +133,9 @@
 <code class="cpp-html">
 const FActorSpawnParameters ActorSpawnParams;
 
-const FTransform SpawnTransform = KeyboardMesh->GetComponentTransform();
+const FTransform& SpawnTransform = KeyboardMesh->GetComponentTransform();
 
-for (auto& ButtonKeyReference: ButtonKeyReferences)
+for (TSubclassOf<AKeyboardButton> ButtonKeyReference: ButtonKeyReferences)
 {
 	AKeyboardButton* NewKey = GetWorld()->SpawnActor<AKeyboardButton>(ButtonKeyReference, SpawnTransform, ActorSpawnParams);
 
@@ -154,7 +154,7 @@ for (auto& ButtonKeyReference: ButtonKeyReferences)
 							
 <pre>
 <code class="cpp-html">
-if ( ( ProcessString.StartsWith(ParameterString) && ProcessString.Len() == ParameterString.Len() ) || ProcessString.StartsWith(ParameterString.Append(TEXT(" "))) )
+if ( ( ProcessString.StartsWith(ParameterString) && ProcessString.Len() == ParameterString.Len() ) || ProcessString.StartsWith(ParameterString.Append(" ")) )
 {
 	return true;
 }
@@ -172,11 +172,10 @@ return false;
 
 <pre>
 <code class="cpp-html">
-FString FirstString = TextIn.Left(CursorPosition);
-if (CursorPosition == 0) FirstString = "";
+const FString& FirstString = TextIn.Left(CursorPosition);
 SetInputText(FirstString);
 
-FString SecondString = TextIn.RightChop(CursorPosition);
+const FString& SecondString = TextIn.RightChop(CursorPosition);
 SetLatterText(SecondString);
 </code>
 </pre>
