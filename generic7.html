@@ -44,8 +44,9 @@
 							<li><a href="generic9.html">Unreal Engine C++ Key Features</a></li>
 							<li><a href="generic8.html">Unreal Engine C++ Progress Logs</a></li>
 							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
-							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
 							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="lowlevelpage.html">C++ Low Level Programming</a></li>
 							<li><a href="generic3.html">Team Project</a></li>							
 							<li><a href="generic2.html">Game Project</a></li>
 							<li><a href="generic.html">Graphics Project</a></li>
@@ -79,12 +80,12 @@
 							<p>Reflections were achieved using screen-space raymarching. This served as the first feature made using raymarching and so was instrumental in its implementation and testing before use in other methods.<br />
 							Meshes may be given "reflectivity maps" to designate the reflectivity across the surface, reflective surfaces showing a degree of reflection of visible geometry based on their reflectivity.</p>
 							
-							<a id="illumination-anchor">Screen-Space Global Illumination:</a>
+							<h3 id="illumination-anchor">Screen-Space Global Illumination:</h3>
 							
 							<p>Global-illumination is achieved through raymarching once for each fragment in a direction determined through cosine-weighted hemisphere sampling.<br />
 							Raymarch intersection positions are then sampled for a mix of base-colour and lighting information to simulate received indirect light from the surroundings. This may then be denoised and applied in the combination stage of deferred rendering.</p>
 							
-							<a id="ssao-anchor">Screen-Space Ambient Occlusion:</a>
+							<h3 id="ssao-anchor">Screen-Space Ambient Occlusion:</h3>
 							
 							<p>Screen-space ambient occlusion is done through sampling several positions around each fragment to determine its exposure to ambient light.<br />
 							These positions are determined through pre-generation of testing kernel positions within a hemisphere, which may then be randomly rotated via pregenerated noise values to improve the quality of results.<br />
@@ -92,13 +93,13 @@
 							
 							<span class="image main"><img src="images/pic27.jpg" alt="" /></span>
 							
-							<a id="shadow-anchor">Screen-Space Shadows:</a>
+							<h3 id="shadow-anchor">Screen-Space Shadows:</h3>
 							
 							<p>Screen-space shadows utilise a simplified raymarching process that can still detect a ray intersection, but does not require the exact position of first intersection.<br />
 							This is used by each light, testing each fragment within the light area of effect in order to detect occlusion from small details that may not be properly caught by the use of shadow-mapping alone.<br />
 							Due to screen-space limitations, this cannot be used for all shadows in a standalone implementation, so much be used in tandem with shadow-mapping.</p>
 							
-							<a id="edge-anchor">Edge-Detection Antialiasing:</a>
+							<h3 id="edge-anchor">Edge-Detection Antialiasing:</h3>
 							
 							<p>In addition to the screen-space effects above, a form of antialiasing was achieved through the use of Sobel edge-detection considering multiple fragment properties.<br />
 							A Sobel kernel is tested along both axial directions considering the difference in both depth values and normal direction in order to detect all surface-edge fragments despite limitations of each considered factor individually.<br />
@@ -107,7 +108,7 @@
 							
 							<span class="image main"><img src="images/pic28.jpg" alt="" /></span>
 							
-							<a id="conclusion-anchor">Project Takeaways:</a>
+							<h3 id="conclusion-anchor">Project Takeaways:</h3>
 							
 							<p>My work on this project helped to teach me about global-illumination methods and screen-space effects, as well as building on my foundational knowledge of rendering and OpenGL.<br />
 							I became familiar with both the benefits of screen-space effects in their performance-friendliness and their limitations from factors such as a lack of scene information beyond that immediately visible.<br />
