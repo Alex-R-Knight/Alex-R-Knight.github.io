@@ -1,0 +1,264 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Alex Knight Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css">
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									</span><span class="title">To Home Page</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
+							<li><a href="generic9.html">Unreal Engine C++ Key Features</a></li>
+							<li><a href="generic8.html">Unreal Engine C++ Progress Logs</a></li>
+							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
+							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="generic3.html">Team Project</a></li>							
+							<li><a href="generic2.html">Game Project</a></li>
+							<li><a href="generic.html">Graphics Project</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>Low Level C++ Feature Notes</h1>
+							
+							<p>Key Points:</p>
+
+							<ul>
+								<li> <a href="#thread-anchor">Multithreading with C++</a> </li>
+								<li> <a href="#memory-anchor">Memory Management with C++</a> </li>							
+							</ul>
+							
+							<h2 id="thread-anchor">Multithreading with C++:</h2>
+							
+							<p>A thread may be created to run a given function, with the function’s parameters.<br />
+							After a thread has been launched, the program may be asked to wait until this thread has completed its function through the join function.</p>
+
+<pre>
+<code class="cpp-html">
+void TestFunction(TestClass* ClassInstance)
+{
+	for (int i = 0; i < 10000; i++)
+	{
+		ClassInstance->IncrementInteger();
+	}
+}
+
+TestClass ClassInstance;
+
+int main(int argc , char* argv[])
+{
+	thread Th1(TestFunction, &ClassInstance);
+	thread Th2(TestFunction, &ClassInstance);
+	
+	Th1.join;
+	Th2.join;
+	
+	return 0;
+}
+</code>
+</pre>
+
+							<p>To prevent race conditions, in which multiple threads modify a shared resource simultaneously, mutual exclusion is required, via a mutex.<br />
+							The mutex will lock access to the shared resources by other threads, preventing these issues.</p>
+							
+							<iframe width="1000" height="491"
+								src="images/mutex.jpg">
+							</iframe>
+							
+							
+							<p>The lock_guard will lock the mutex for the duration of its existence until destruction, which is in this case the duration of the scope in which it is created.<br />
+							This helps to simplify code in comparison to manually locking and unlocking the mutex.<br />
+							Also, in situations using exception handling, it removes the risk of events such as a thrown exception preventing the unlocking of a thread after it is locked.</p>
+<pre>
+<code class="cpp-html">
+class TestClass
+{
+	int Counter;
+	mutex TestMutex;
+public:
+	TestClass(): Counter(0), TestMutex() {}
+	
+	void IncrementInteger()
+	{
+		lock_guard<mutex> GuardInstance(TestMutex);
+		Counter++;
+	}
+}
+</code>
+</pre>
+							
+							<p>Whereas the above code should always produce a counter value of 20,000, race conditions can cause unexpected and abnormal values, as both threads attempt to access and change the same value at once.<br />
+							Hence, lock_guard is critical to preventing these abnormal results.</p>
+							
+							<p>Amidst my rendering work, I took the chance to test multithreading through using it to update different branches of scene nodes simultaneously;</p>
+
+<pre>
+<code class="cpp-html">
+void Renderer::UpdateScene(float dt) {
+	viewMatrix = activeCamera->BuildViewMatrix();
+	projMatrix = Matrix4::Perspective(1.0f, 1000.0f, (float)width / (float)height, 45.0f);
+	frameFrustum.FromMatrix(projMatrix * viewMatrix);
+
+	std::thread StandardNodeThread(&SceneNode::Update, &*standardroot, dt);
+	std::thread MovingNodeThread(&SceneNode::Update, &*movingroot, dt);
+
+	StandardNodeThread.join();
+	MovingNodeThread.join();
+}
+</code>
+</pre>
+
+
+							<h2 id="memory-anchor">Memory Management with C++:</h2>
+							
+							<p>Memory allocation and management in C++ can be more closely controlled through expanding on the basic heap memory operators.</p>
+							
+							<p>Overriding the 'new' and 'delete' operators allows for profiling memory usage, tracking the allocated memory through static heap classes.<br />
+							These heap classes may also point into linked lists of their constituent contents.<br />
+							Function overloading can allow chosen classes to pass in a pointer to a specific heap on which to track memory allocation.<br />
+							Otherwise, a non-overloaded version will contribute to a default heap. Only one standard delete override is required, for reasons below.</p>
+
+<pre>
+<code class="cpp-html">
+void* TestObject::operator new(size_t size)
+{
+    customHeap* ptr = &customHeapManager::objectHeap;
+    return ::operator new(size, ptr);
+}
+
+void TestObject::operator delete(void* ptr, size_t size)
+{
+    ::operator delete(ptr);
+}
+</code>
+</pre>
+
+							<p>The overloaded 'new' function may encase the created data with front and back structs on each side of it within the allocated memory.<br />
+							The allocated memory space accounts for these structs.<br />
+							These may contain important data such as the size of the data stored inside and pointers for the linked lists within custom heaps.<br />
+							They may also contain data in both structs used to verify that the allocated memory has not been unexpectedly altered, when checking for errors in memory allocation and management.</p>
+							
+							<p>Because these may also store a pointer to the relevant heap class, a standardised 'delete' overload may use the data in these structs to know which heap to reduce the memory count of, and account for the access-points of the linked lists.</p>
+
+<pre>
+<code class="cpp-html">
+void* operator new (size_t size, customHeap* heapSpec)
+{
+    std::cout << "New function called\n";
+
+    // Increment specified heap
+    heapSpec->addAllocatedBytes(size);
+
+    // Determine total requred memory for pointer and MemoryData sections
+    size_t totalRequiredMemorySize = size + sizeof(MemoryDataFront) + sizeof(MemoryDataBack);
+    // Allocate this required memory, this pointer refers to the start position
+    char* Memory = (char*)malloc(totalRequiredMemorySize);
+    // Sets first point in allocated memory to the front memory data section
+    MemoryDataFront* MemoryDataFrontInstance = (MemoryDataFront*)Memory;
+    // Set the front memory data's size value to the size of the original desired amount
+    // Also set heap pointer to the specified heap
+    MemoryDataFrontInstance->dataSize = size;
+    MemoryDataFrontInstance->heap = heapSpec;
+
+    // Get start point in memory for the rear memory data section, by adding the other two occupiers of space
+    void* MemoryDataBackStartPosition = Memory + sizeof(MemoryDataFront) + size;
+    // Sets this position to contain the memory data section
+    MemoryDataBack* MemoryDataBackInstance = (MemoryDataBack*)MemoryDataBackStartPosition;
+
+    // set rear data section's data here
+
+    // Determine and return the start position of the originally requested memory, rather than the start position of the memory data front section
+    void* MemoryBlockStartPosition = Memory + sizeof(MemoryDataFront);
+
+
+    // Organise pointers of header, adjacent headers and the heap
+    if (!heapSpec->firstObject)
+    {
+        heapSpec->firstObject = MemoryDataFrontInstance;
+        heapSpec->lastObject = MemoryDataFrontInstance;
+    }
+    else
+    {
+        heapSpec->lastObject->next = MemoryDataFrontInstance;
+        MemoryDataFrontInstance->previous = heapSpec->lastObject;
+    }
+    heapSpec->lastObject = MemoryDataFrontInstance;
+
+    return MemoryBlockStartPosition;
+}
+</code>
+</pre>
+
+							<p>These heaps may also be used for the early allocation of memory for significant data that is known to be required.</p>
+
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>My links</h2>
+								<ul class="icons">
+									<li><a href="https://github.com/Alex-R-Knight" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; Alex Knight | 2024 </li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			
+			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/cpp.js"></script>
+			<script>hljs.highlightAll();</script>
+
+	</body>
+</html>
