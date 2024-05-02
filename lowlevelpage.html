@@ -69,6 +69,8 @@
 							
 							<h2 id="thread-anchor">Multithreading with C++:</h2>
 							
+							<h3>Threading Basics:</h3>
+							
 							<p>A thread may be created to run a given function, with the function’s parameters.<br />
 							After a thread has been launched, the program may be asked to wait until this thread has completed its function through the join function.</p>
 
@@ -96,6 +98,8 @@ int main(int argc , char* argv[])
 }
 </code>
 </pre>
+
+							<h3>Mutexes:</h3>
 
 							<p>To prevent race conditions, in which multiple threads modify a shared resource simultaneously, mutual exclusion is required, via a mutex.<br />
 							The mutex will lock access to the shared resources by other threads, preventing these issues.</p>
@@ -129,6 +133,24 @@ public:
 							<p>Whereas the above code should always produce a counter value of 20,000, race conditions can cause unexpected and abnormal values, as both threads attempt to access and change the same value at once.<br />
 							Hence, lock_guard is critical to preventing these abnormal results.</p>
 							
+							<h3>Hazards of Mutex Usage:</h3>
+							
+							<p>I've found that mutex usage can also cause significant issues within programs.<br />
+							This is due to factors like the ability for a mutex lock to leave several other threads wasting CPU cycles as they wait idly for a chance to acquire mutex lock themselves.<br />
+							This idling time represents CPU cycles that could have been spent productively elsewhere.</p>
+							
+							<p>Worse yet are scenarios in which multiple threads are witholding data from each other that is necessary to continue their work, creating thread deadlock.</p>
+							
+							<h3>Mitigating Mutex Hazards:</h3>
+							
+							<p>Some of these issues may be mitigated through the use of unique_locks, over lock_guards.<br />
+							These, depending on their constructor arguments, may not immediately lock a mutex but may instead be locked through std::lock, taking any number of these unique_locks as arguments.<br />
+							Hence, std::lock will wait until all given mutexes are available to lock, helping prevent deadlock issues.</p>
+							
+							<p>Nonetheless, mutexes and locking present many potential points of failure in a program, so must be handled with great care.</p>
+							
+							<h3>Threading Test:</h3>
+							
 							<p>Amidst my rendering work, I took the chance to test multithreading through using it to update different branches of scene nodes simultaneously;</p>
 
 <pre>
@@ -150,12 +172,14 @@ void Renderer::UpdateScene(float dt) {
 
 							<h2 id="memory-anchor">Memory Management with C++:</h2>
 							
+							<h3>Memory Profiling Work:</h3>
+							
 							<p>Memory allocation and management in C++ can be more closely controlled through expanding on the basic heap memory operators.</p>
 							
 							<p>Overriding the 'new' and 'delete' operators allows for profiling memory usage, tracking the allocated memory through static heap classes.<br />
 							These heap classes may also point into linked lists of their constituent contents.<br />
 							Function overloading can allow chosen classes to pass in a pointer to a specific heap on which to track memory allocation.<br />
-							Otherwise, a non-overloaded version will contribute to a default heap. Only one standard delete override is required, for reasons below.</p>
+							Otherwise, a non-overloaded version will contribute to a default heap. Only one standard delete overload is required, for reasons below.</p>
 
 <pre>
 <code class="cpp-html">
@@ -171,6 +195,8 @@ void TestObject::operator delete(void* ptr, size_t size)
 }
 </code>
 </pre>
+
+							<h3>Operator Overloading</h3>
 
 							<p>The overloaded 'new' function may encase the created data with front and back structs on each side of it within the allocated memory.<br />
 							The allocated memory space accounts for these structs.<br />
@@ -202,7 +228,7 @@ void* operator new (size_t size, customHeap* heapSpec)
     // Sets this position to contain the memory data section
     MemoryDataBack* MemoryDataBackInstance = (MemoryDataBack*)MemoryDataBackStartPosition;
 
-    // set rear data section's data here
+    // set and required rear data section's data here
 
     // Determine and return the start position of the originally requested memory, rather than the start position of the memory data front section
     void* MemoryBlockStartPosition = Memory + sizeof(MemoryDataFront);
@@ -226,7 +252,56 @@ void* operator new (size_t size, customHeap* heapSpec)
 </code>
 </pre>
 
-							<p>These heaps may also be used for the early allocation of memory for significant data that is known to be required.</p>
+							<h3>Custom Heaps:</h3>
+
+							<p>The custom heap classes used for tracking this data are simple in their key features.<br />
+							Using pointers to both ends of the linked list allows for rapidly returning the final entry for actions such as adding a new entry to the end of the list<br />
+							This is in contrast to passing through all entries from the start each time, comparatively inefficient.</p>
+
+<pre>
+<code class="cpp-html">
+class customHeap
+{
+public:
+    int memoryInUse = 0;
+
+    MemoryDataFront* firstObject = nullptr;
+    MemoryDataFront* lastObject = nullptr;
+
+    void addAllocatedBytes(int i);
+    void removeAllocatedBytes(int i);
+};
+</code>
+</pre>
+
+							<h3>Data Encapsulation:</h3>
+
+							<p>The memory data section's key data includes the size of the encapsulated data and a pointer to it's correct custom heap.<br />
+							There is also a value for checking data has not bene unintentionally altered, and the pointers used to form a doubly-linked list, usable to traverse the heap for any required functions.</p>
+							
+<pre>
+<code class="cpp-html">
+struct MemoryDataFront
+{
+    int dataSize;
+
+    customHeap* heap;
+
+    MemoryDataFront* previous = nullptr;
+
+    MemoryDataFront* next = nullptr;
+
+    char safetyCheckVal = 'a';
+};
+</code>
+</pre>							
+
+							<h3>Drawbacks and Benefits:</h3>
+
+							<p>It is important to consider the amount of additional memory consumed by these data sections, which may be larger than the data they encapsulate and which will accumulate significantly as data is stored to the heap.<br />
+							Nonetheless this provides the means to track and traverse grouped lists of different data within a program, for profiling and other purposes.</p>
+							
+							<p>The custom heaps may also be used for the early allocation of memory for significant data that is known to be required, removing the need for new/delete calls during runtime.</p>
 
 						</div>
 					</div>
