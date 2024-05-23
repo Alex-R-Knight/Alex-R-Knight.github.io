@@ -67,7 +67,8 @@
 								<li> <a href="#input-anchor">Input Handling</a> </li>
 								<li> <a href="#keyboard-anchor">Interactive Keyboard</a> </li>
 								<li> <a href="#string-anchor">Advanced Command Processing</a> </li>
-								<li> <a href="#input2-anchor">Advanced Input Control</a> </li>								
+								<li> <a href="#input2-anchor">Advanced Input Control</a> </li>			
+								<li> <a href="#bars-anchor">Visual Improvements</a> </li>		
 							</ul>
 							
 							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
@@ -190,6 +191,18 @@ if (CursorPosition < UserInputString.Len()) CursorPosition++;
 TerminalWidget->CurrentTerminalLine->SetDividedText(UserInputString, CursorPosition);
 </code>
 </pre>
+						
+							<h2 id="bars-anchor">Visual Improvements:</h2>
+							
+							<iframe width="600" height="340"
+								src="images/terminalbars.gif">
+							</iframe>
+							
+							<p>Revisiting the visual side of the terminal, I added animated elements to the interface to help add visual variety to it's use.<br />
+							The moving scanline effect was also replaced with a more muted screen-wide flickering in the postprocess applied to the screen.</p>
+							
+							<p>The quantisation/dithering postprocessing was also improved to allow for different resolutions of dithering to be applied to in-focus objects, improving the visual quality of the terminal.</p>
+							
 						
 							<p>So far, working to create this terminal has been great practise in problem solving and interface development, with various technical issues found and quickly resolved.</p>
 							
