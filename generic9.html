@@ -63,6 +63,7 @@
 							<ul>
 								<li> <a href="#interaction-anchor">Mechanic - 3D Interaction System</a> </li>
 								<li> <a href="#terminal-anchor">Mechanic - Computer Terminal System</a> </li>
+								<li> <a href="#AI-anchor">Mechanic - AI - Environment Reactivity</a> </li>
 								<li> <a href="#shader-anchor">Rendering - Dynamic Colour Quantisation and Dithering</a> </li>
 							</ul>
 							
@@ -161,6 +162,64 @@
 							
 							<p>To explain terminal functions, an interactive manual with moving 3D pages has been created, using the interaction system.</p>
 							
+							
+							<h2 id="AI-anchor">Mechanic - AI - Environment Reactivity:</h2>
+							
+							<span class="image main"><img src="images/EQS.png" alt="" /></span>
+							
+							
+							<section class="tiles">
+								
+								<article class="style6">
+									<span class="image">
+										<img src="images/slimtest.jpg" alt="" />
+									</span>
+									<a href="AIdevpage.html">
+										<h2>Click here for a technical overview</h2>
+										
+									</a>
+								</article>
+								
+							</section>
+							
+							<p></p>
+							
+							<h3 id="AI-main-anchor">Key Features:</h3>
+							
+							<p>Much work has gone into allowing an AI-controlled character to meaningfully interact with the environment.
+							This has posed numerous challenges of how it should interact with objects designed for the player interaction system, and of general performance.</p>
+							
+							<h3 id="AI-door-anchor">AI-Door Interaction:</h3>
+							
+							<p>To achieve AI-interaction with doors designed for the player interaction system, a larger setup was built around the door using navmesh modifiers and linkers.</p>
+							
+							<p>These were then connected to the interaction component of the door with delegates, to alter the navmesh elements as the door moves.<br />
+							Whilst an open door provides a clear passage in the navmesh, a sufficiently closed door will instead prompt a smart navlink event through which the AI throws the door open before passing.</p>
+							
+							<p>This has proven sufficient in testing, after the addition of a collision volume to detect and knock the player away from a swung-open door, to avoid awkward physics interactions.<br />
+							Through this, doors become an active element of player-AI interactions, closable as an obstacle and speedbump to a pursuing character.</p>
+							
+							<h3 id="AI-obstacle-anchor">Dynamic Obstacle-Navmesh Effects:</h3>
+							
+							<p>Further expanding on the player affecting AI behaviour, a combination of Navigation Query Filters and NavAreas affect how the AI navigates obstacles.</p>
+							
+							<p>An obstacle may change its NavArea from that of an untouched obstacle, to a tampered one and then as it is fully cleared become default navmesh.<br />
+							The AI may likewise use different Navigation Query Filters based on its current state, with rising disregard for obstacles.</p>
+							
+							<p>Thus, a roaming AI will not touch untouched obstacles, and will at least try to find other ways past partial obstructions.<br />
+							However, an AI searching for the source of a noise may happily break through an already damaged barrier in search of its tamperer.<br />
+							An AI in pursuit of the player will break through any obstacle in their path.</p>
+							
+							<h3 id="AI-search-anchor">Environment Query System Usage:</h3>
+							
+							<p>The Environment Query System has been used to improve the the AI's ability to search their environment.</p>
+							
+							<p>If the AI has moved to investigate a sound and found no player, EQS is used to detect reachable locations that are currently not visible to the AI's sight.<br />
+							This query is run in a forward facing cone, though if insufficient results are returned, the AI may turn to consider other search directions.</p>
+							
+							<p>Additionally, the AI Sight Target Interface has been improved for the player character, which by default only checks against the center of the player capsule.</p>
+							
+							
 							<h2 id="shader-anchor">Rendering - Dynamic Colour Quantisation and Dithering:</h2>
 							<iframe width="1200" height="680"
 								src="images/VariableQuality.jpg">
@@ -194,6 +253,8 @@
 							<p>The custom stencil value informs the shader how to manage the downsampling and the number of possible colour values from quantisation.<br />
 							This allows for objects such as those locked in for interaction to become "in-focus" visually.<br />
 							It also, importantly, allows for surfaces like book pages or a text-based terminal screen to remain legible whilst still matching their surroundings through a less constrained quantisation.</p>
+							
+							
 							
 							<a href="generic8.html">For a more detailed breakdown of feature development and problem solving, click here.</a>
 						</div>

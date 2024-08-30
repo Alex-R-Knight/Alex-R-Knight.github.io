@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Alex Knight Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css">
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									</span><span class="title">To Home Page</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
+							<li><a href="generic9.html">Unreal Engine C++ Key Features</a></li>
+							<li><a href="generic8.html">Unreal Engine C++ Progress Logs</a></li>
+							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
+							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="lowlevelpage.html">C++ Low Level Programming</a></li>
+							<li><a href="generic3.html">Team Project</a></li>							
+							<li><a href="generic2.html">Game Project</a></li>
+							<li><a href="generic.html">Graphics Project</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>Unreal Engine Five - AI Development</h1>
+							
+							<p>Key points in feature development:</p>
+
+							<ul>
+								<li> <a href="#perception-anchor">AI Perception Improvement (code)</a> </li>
+								<li> <a href="#EQS-anchor">Environment Query System Usage</a> </li>
+								<li> <a href="#navigation-anchor">AI Navigation Foundations</a> </li>
+								<li> <a href="#door-anchor">AI - Door Interaction</a> </li>
+								<li> <a href="#obstacle-anchor">Dynamic Obstacle-Navmesh Effects</a> </li>
+							</ul>
+							
+							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<p></p>
+							<a href="generic8.html">To see all development summaries, click here.</a>
+							<p></p>
+							
+							<h2 id="perception-anchor">AI Perception Improvement:</h2>
+														
+							
+							
+							<p>The first step in AI work was to improve the way in which Unreal's perception system detects the player by sight.<br />
+							The default method raycasts against the center of the player, producing unwanted results illustrated below:</p>
+							
+							<span class="image main"><img src="images/perception.jpg" alt="" /></span>
+							
+							<p>To fix this, the CanBeSeenFrom interface was rewritten for the player character, to introduce a second raycast against the position of the camera, the best representation of the head.</p>
+							
+<pre>
+<code class="cpp-html">
+OutSightStrength = 1;
+
+FHitResult HitResult;
+
+FVector SightTargetLocation = GetCapsuleComponent()->GetComponentLocation();
+const FCollisionQueryParams CollisionQueryParams =  FCollisionQueryParams(FName(TEXT("CharacterLOSTest")), false, IgnoreActor);
+const UWorld* World = GetWorld();
+
+World->LineTraceSingleByChannel(HitResult, ObserverLocation, SightTargetLocation, ECC_Visibility, CollisionQueryParams);
+if (HitResult.GetActor() == this)
+{
+	OutSeenLocation = SightTargetLocation;
+	NumberOfLoSChecksPerformed = 1;
+	return true;
+}
+
+SightTargetLocation = GetFirstPersonCameraComponent()->GetComponentLocation();
+NumberOfLoSChecksPerformed = 2;
+
+World->LineTraceSingleByChannel(HitResult, ObserverLocation, SightTargetLocation, ECC_Visibility, CollisionQueryParams);
+if (HitResult.GetActor() == this)
+{
+	OutSeenLocation = SightTargetLocation;
+	return true;
+}
+	
+OutSightStrength = 0;
+return false;
+</code>
+</pre>						
+							
+							<p>The check against the capsule centre was kept for situations in which the head is obscured, but no further checks were added for sake of performance.<br />
+							Likewise, the code was optimised as much as was possible due to its potential for use on every tick, and potentially including two raycasts.<br />
+							This has proven suitable for my needs in testing, though may be revisited in future.</p>
+							
+							<h2 id="EQS-anchor">Environment Query System Usage:</h2>
+							
+							<span class="image main"><img src="images/EQS.png" alt="" /></span>
+							
+							<p>As I began to develop the AI behaviour, the need arose for a "search" state that the AI would switch to after losing sight of the player, or as it investigates the source of a noise.</p>
+							
+							<p>After some research, I began using the Environment Query System as the basis of this.<br />
+							In a cone forwards from the AI, locations are judged on their distance and visibility from the AI's current position to prioritise blind spots to be searched.<br />
+							This is used to find a search location, and the process is repeated several times unless interrupted by new stimuli.</p>
+							
+							<p>Due to some test cases giving no blind spots in a direction, I expanded on this behaviour to make the AI rotate and repeat this process in a new direction if no suitable positions are found.</p>
+							
+							<p>This has proven suitable in testing, and I am experimenting with further uses of the EQS, such as to center the AI's roaming behaviour to be "tethered" to the player location so that it never strays too far away by chance.</p>
+							
+							
+							
+							<h2 id="navigation-anchor">AI Navigation Foundations:</h2>
+							
+							<p>As I began to work on the AI and its ability to navigate levels, I first settled on some key design principles:</p>
+							
+							<p>For sake of performance, the navmesh would only update in real-time, from earmarked actors only.<br />
+							These earmarked actors would affect the navmesh only through navmesh modifiers to provide maximum control over their effects.<br />
+							Likewise, these objects would not collide with the AI, instead relying on their navmesh alterations to confine movement. This is to avoid unwanted behaviour emerging from physics quirks.</p>
+							
+							
+							<h2 id="door-anchor">AI - Door Interaction:</h2>
+							
+							<span class="image main"><img src="images/AIDoors.png" alt="" /></span>
+							
+							
+							<p>Doors were first developed with the player interaction system, for mouse/cursor based control.<br />
+							Hence, adding proper AI-interaction with this system presented an interesting challenge to solve.</p>
+							
+							<p>I started by adding a nav-link to doors, by which the AI recognises a passage between the navmesh either side of the doorway.<br />
+							With no collisions between the door and AI, as per the principles, this solved the first step of allowing AI-navigation.</p>
+							
+							<p>The next step was to add proper interaction between the AI and the door as it passes through, including factoring in the state of the door.<br />
+							To start with this, I added a custom event to the nav-link for when the AI crosses it.<br />
+							This event applied an impulse to the interaction component to propel it into a fully open position, whilst pausing the AI's motion for a moment as the door opens.<br />
+							The functionality was also added such that player interaction could not interrupt this, and the door would not bounce back from its outer limit despite the force.</p>
+							
+							<p>This was already a marked improvement to AI door usage, albeit this process would take place even for an open door, with the same delay to AI movement.</p>
+							
+							<p>The interaction component of the door contains delegates related to it's movement and openness.<br />
+							I used these to enable/disable the navlink based on the door's position, alternating with a navmodifier that enabled ordinary movement through the doorway.</p>
+							
+							<p>After some fine-tuning in testing, this provided an ideal solution to believable interaction between the AI and doors.<br />
+							It even improved gameplay through the risk/reward of a player stopping to attempt to close doors behind them in order to slow down a pursuing AI.</p>
+							
+							<p>I am further experimenting with this in various ways, such as adding an additional navmodifier to encourage better AI movement around an open door being passed but not entered.</p>
+							
+							<h2 id="obstacle-anchor">Dynamic Obstacle-Navmesh Effects:</h2>
+							
+							<span class="image main"><img src="images/AIPlank.png" alt="" /></span>
+							
+							<p>After door interaction, designing AI-affecting obstacles was mainly a matter of applying what doors had taught me and experimenting with Navigation Query Filters.</p>
+							
+							<p>The nominal dynamic obstacle is any form of barricade blocking a passage, such as nailed boards across a doorway.<br />
+							For these, I tested using a navmodifier whose "area class" changed as the obstacle is cleared.<br />
+							Starting as a full obstacle, partial clearing changes the area class to a partial obstacle, finally it becomes natural navmesh when fully cleared.<br />
+							Instead of overriding the default navigation cost, these  area classes use differing costs of entry so that the act of crossing the barrier applies cost, instead of any quirk of the nav modifier size.</p>
+							
+							<p>I began utilising Navigation Query Filters for the AI based on its current state, to further affect how it reacted to obstacles.<br />
+							Normal roaming excluded full obstacles areas entirely, to prevent crossing.<br />
+							Investigating a sound on the other hand would remove any extra cost of crossing a partial obstacle. Full obstacles retained a crossing cost to encourage the AI to take clear paths to investigate, if possible.<br />
+							When the AI was actively hostile to the player, partial and full obstacles lost all extra navigation cost, resulting in the most direct path being taken to catch the player.</p>
+							
+							<p>Whilst the navigation cost values required adjustment, this has proven suitable for altering the way the AI navigates the environment, based on player actions.</p>
+							
+							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<p></p>
+							<a href="generic8.html">To see all development summaries, click here.</a>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>My links</h2>
+								<ul class="icons">
+									<li><a href="https://github.com/Alex-R-Knight" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; Alex Knight | 2024 </li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			
+			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/cpp.js"></script>
+			<script>hljs.highlightAll();</script>
+
+	</body>
+</html>
