@@ -58,7 +58,7 @@
 				<!-- Main -->
 					<div id="main">
 						<div class="inner">
-							<h1>Unreal Engine Five - Colour Quantisation and Dithering Development</h1>
+							<h1>Unreal Engine Five - Colour Quantisation, Dithering Development and other Visual Effects</h1>
 							
 							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
@@ -95,7 +95,28 @@
 							<iframe width="1200" height="680"
 								src="images/dithernodes.jpg">
 							</iframe>
-							<p></p>
+							
+							<h2 id="parameter-anchor">Improved Passing of Data to Shaders:</h2>
+							
+							<p>In my initial postprocessing work, I passed values through by creating a dynamic material instance for each postprocess.<br />
+							This required a fairly convoluted process by which the player character found a level's postprocess volume, replacing its materials with newly created dynamic material instances to which values would be passed.</p>
+							
+							<p>Hence, I began using Material Parameter Collections.<br />
+							These proved far more suitable to work with. All shaders may freely draw from these collections without the need to set up dynamic instances.<br />
+							Because of this, I am able to apply my postprocesses directly to the player character's multiple cameras without needing multiple instances of each process, for each camera.<br />
+							This removes the need for a postprocess volume within every level, and gives me a tidier and more manageable setup.</p>
+							
+							<h2 id="wobble-anchor">Other Shader Effects:</h2>
+							
+							<p>With the utility of material parameter collections, I experimented with some other effects.<br />
+							Amongst these was emulating the "vertex snapping" of older hardware, scaling in its intensity based on the player's health.</p>
+							
+							<p>To achieve a scaling intensity, the player's health produces a value whenever it changes, mapped between the possible extents for vertex snapping.<br />
+							This value is set in a material parameter collection, and then read by a material function going into the world position offset of materials.</p>
+							
+							<p>This use of a material function allows me to easily add or remove this effect from any material and object I need without difficulty.<br />
+							Within the function, the camera-relative world position is divided, floored, and then multiplied by the scaled parameter.<br />
+							The result of this is subtracted from the relative world position to give the offset applied to the vertex.</p>
 							
 							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>

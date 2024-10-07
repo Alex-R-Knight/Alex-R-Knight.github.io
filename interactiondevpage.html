@@ -74,6 +74,7 @@
 								<li> <a href="#wheel-anchor">Accurate 3D Valve-Interaction (Code)</a> </li>	
 								<li> <a href="#page-anchor">3D-Interactive Books</a> </li>
 								<li> <a href="#plank-anchor">Improved Object Carrying</a> </li>
+								<li> <a href="#double-anchor">Dual-Object Carrying Changes</a> </li>
 							</ul>
 							
 							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
@@ -353,6 +354,16 @@ Momentum = FMath::Clamp(Momentum + InputAlignment, -MaxMomentum, MaxMomentum);
 							<p>Most of the carrying logic was then moved into the component itself, so that I could add more functionality to held objects.<br />
 							The first test of this is the planks shown above, which must be held onto to remove them from the wall, before they can be set aside.<br />
 							I also used these to test a dithered fade effect that runs before the object is removed, to help reduce scene clutter.</p>
+							
+							<h2 id="double-anchor">Dual-Object Carrying Changes:</h2>
+							
+							<p>The ability to hold only one carryable object at a time was originally a design choice, to encourage the player to carefully choose what to bring with them.<br />
+							In hindsight, this created inconvenient situations, such as replacing a fuse for a fusebox involving juggling items between the players hand and the floor.</p>
+							
+							<p>Hence, a second physics handle was added, and I changed the carrying logic to allow an object to be stored "offhand".<br />
+							All dragging logic would be unaffected by the offhand carrying of an object.</p>
+							
+							<p>This proved to be a suitable design change, removing a frustrating element of gameplay.</p>
 							
 							
 							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>

@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Alex Knight Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css">
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									</span><span class="title">To Home Page</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
+							<li><a href="generic9.html">Unreal Engine C++ Key Features</a></li>
+							<li><a href="generic8.html">Unreal Engine C++ Progress Logs</a></li>
+							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
+							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="lowlevelpage.html">C++ Low Level Programming</a></li>
+							<li><a href="generic3.html">Team Project</a></li>							
+							<li><a href="generic2.html">Game Project</a></li>
+							<li><a href="generic.html">Graphics Project</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>Unreal Engine Five - Level Design/Tools</h1>
+							
+							<p>Key points:</p>
+
+							<ul>
+								<li> <a href="#stair-anchor">Level Design Tools (code)</a> </li>
+								<li> <a href="#blockout-anchor">Initial Level Work</a> </li>
+							</ul>
+							
+							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<p></p>
+							<a href="generic8.html">To see all development summaries, click here.</a>
+							<p></p>
+							
+							<h2 id="stair-anchor">Level Design Tools:</h2>
+							
+							<h3>Dynamic Stair Generation</h3>
+							
+							<span class="image main"><img src="images/generatedstairs.png" alt="" /></span>
+							
+							<p>Making a proper level, the need to make and adjust stairs of various dimensions on the fly became a problem.<br />
+							Both stairs made with UE5 modelling mode's stair mesh generator, and cubegrid tool, were unsuitable for on-the-fly adjustments to dimensions, step count and more.</p>
+							
+							<p>To solve this, I created a tool for generating and adjusting stairs made from an instanced static mesh component.<br />
+							When the mesh of a single step is provided, the player can specify the number of steps and their increment to fill in any gap as required.<br />
+							The bounds of steps may also be used, as well as custom starting positions, to help fit more spaces without needing to make new meshes.</p>
+							
+							<p>I also included a ramp collision, which automatically adjusts itself to the size of the generated stairs.<br />
+							This is purely for character collisions, to provide smoother movement instead of a sharp jump upwards with each step taken.</p>
+							
+							<p>The stair setup utilises the "CallInEditor" UFUNCTION specifier so all adjustments can be easily done in the editor.</p>
+							
+<pre>
+<code class="cpp-html">
+const UStaticMesh* InstancedMesh = InstancedMeshComponent->GetStaticMesh();
+if (!RampMesh->GetStaticMesh() || !InstancedMesh) return;
+
+// Clear previous mesh instances
+InstancedMeshComponent->ClearInstances();
+
+// Begin offset at zero, or custom position
+FVector Offset = (CustomIncrement) ? StartOffset : FVector(0.0f);
+
+// Get full dimensions of a stair step
+const FVector Bounds = InstancedMesh->GetBounds().BoxExtent*2;
+// Increment step position by bounds, or custom distance
+Increment = (CustomIncrement) ? Increment : FVector(Bounds.X, 0.0f, Bounds.Z);
+
+// Create the first step instance
+FTransform InstanceTransform{ FRotator(0.0f), Offset, FVector(1.0f) };
+InstancedMeshComponent->AddInstance(InstanceTransform);
+
+for (int i = 1; i < Steps; i++)
+{
+	// Increment the offset position
+	Offset += Increment;
+	InstanceTransform.SetTranslation(Offset);
+	// Create a new step instance there
+	InstancedMeshComponent->AddInstance(InstanceTransform);
+}
+
+// Set ramp scale to match the distance covered by all steps combined
+Offset += Bounds;
+RampMesh->SetRelativeScale3D(Offset/100);
+</code>
+</pre>	
+							
+							<p>This has worked wonderfully so far, allowing me to easily make and alter stairs as I work on levels.</p>
+							
+							<p>I have also used the "EditCondition" and "EditConditionHides" UPROPERTY specifiers to hide the custom parameters unless a custom increment is enabled for the stairs.<br />
+							This helps to simplify and remove clutter from the interface, for other users.</p>
+							
+							
+							<span class="image main"><img src="images/stairsettings.png" alt="" /></span>
+							
+							<h3>Area Particle Effects</h3>
+							
+							<span class="image main"><img src="images/fogbox.png" alt="" /></span>
+							
+							<p>I found whilst working that fog particle effects worked surprisingly well with my downsampling and colour quantisation/dithering.<br />
+							To help apply these to the level easily, I created tools for setting user parameters for the Niagara particle systems within the level in-editor.</p>
+							
+							<p>A volume, such as a box or capsule, can help to visualise the extent of the particle spawn area, which can then be applied to the particle system at the press of a button.<br />
+							Other parameters allow for altering the spawn-rate, lifespan and size of fog particles, amongst other things.</p>
+							
+							<h2 id="blockout-anchor">Initial Level Work:</h2>
+							
+							<span class="image main"><img src="images/blockout2.png" alt="" /></span>
+							
+							<p>This section is more detached from my design and programming work, but nonetheless still involved learning to work with the engine.</p>
+							
+							<p>Unreal Engine provided useful tools for prototyping and making levels entirely within the engine.<br />
+							Early experimentation with additive and subtractive geometry brushes proved interesting, but ultimately unwieldy and with unexpected impacts on the handling of raycast results.<br />
+							I quickly settled on working with the cubegrid system, which proved wonderful for both blockout work and creating proper level geometry.</p>
+							
+							<p>Using a collection of material textures, cubegrid can be used to make acceptable level geometry in the engine, with easy access to other terrain and objects for reference and scale.<br />
+							Cubegrid does have limitations, such as the ability to easily and unecessarily quadruple the number of vertices of a mesh if it is not used in specific ways, but these issues can be avoided once known.</p>
+							
+							<p>Using a collection of material textures, cubegrid can be used to make acceptable level geometry in the engine, with easy access to other terrain and objects for reference and scale.<br />
+							Cubegrid does have limitations, such as the ability to easily and unecessarily quadruple the number of vertices of a mesh if it is not used in specific ways, but these issues can be avoided once known.</p>
+							
+							<span class="image main"><img src="images/blockout1.png" alt="" /></span>
+							
+							<p>I followed basic level design principles, working and testing blockouts before iterating with proper geometry.<br />
+							Beyond cubegrid geometry, commonly used meshes such as pipes use shared materials and LODs where possible, often in "packed-level actors" to improve performance.</p>
+							
+							<p>Creating and testing a proper level gave me lots of useful knowledge for how to further develop game mechanics, and experience utilising the tools I had made.</p>
+							
+							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<p></p>
+							<a href="generic8.html">To see all development summaries, click here.</a>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>My links</h2>
+								<ul class="icons">
+									<li><a href="https://github.com/Alex-R-Knight" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; Alex Knight | 2024 </li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			
+			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/cpp.js"></script>
+			<script>hljs.highlightAll();</script>
+
+	</body>
+</html>

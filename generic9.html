@@ -64,6 +64,7 @@
 								<li> <a href="#interaction-anchor">Mechanic - 3D Interaction System</a> </li>
 								<li> <a href="#terminal-anchor">Mechanic - Computer Terminal System</a> </li>
 								<li> <a href="#AI-anchor">Mechanic - AI - Environment Reactivity</a> </li>
+								<li> <a href="#level-anchor">Utility - Level Design Tools</a> </li>
 								<li> <a href="#shader-anchor">Rendering - Dynamic Colour Quantisation and Dithering</a> </li>
 							</ul>
 							
@@ -218,6 +219,42 @@
 							This query is run in a forward facing cone, though if insufficient results are returned, the AI may turn to consider other search directions.</p>
 							
 							<p>Additionally, the AI Sight Target Interface has been improved for the player character, which by default only checks against the center of the player capsule.</p>
+							
+							
+							
+							<h2 id="level-anchor">Utility - Level Design Tools:</h2>
+							<span class="image main"><img src="images/fogbox.png" alt="" /></span>
+							
+							<section class="tiles">
+								
+								<article class="style6">
+									<span class="image">
+										<img src="images/slimtest.jpg" alt="" />
+									</span>
+									<a href="leveldesignpage.html">
+										<h2>Click here for a technical overview</h2>
+										
+									</a>
+								</article>
+								
+							</section>
+							
+							<p></p>
+							
+							<h3 id="level-main-anchor">Key Features:</h3>
+							
+							<p>As I began creating a proper level in which to use everything I've made, I began finding the need to streamline processes like setting up particle effects or adjusting stair meshes.<br />							
+							I created some tools to help greatly speed up these tasks, whilst also being intuitive for others to use.</p>
+							
+							<h3 id="level-fog-anchor">Area Particle Effect Tools:</h3>
+							
+							<p>To rapidly set up fog effects throughout the level, I made a tool to easily adjust the parameters of a niagara system without delving into blueprints.<br />	
+							Volumes could be used to visually determine the area-of-effect within the editor, and then apply these volume bounds to the particle system without any trial and error process.</p>
+							
+							<h3 id="level-stair-anchor">Instanced Mesh Stair Generation:</h3>
+							
+							<p>As I found issues with typical methods for creating and adjusting stair meshes in my level, I created a tool to generate and adjust stairs made from an instanced static mesh.<br />							
+							From this, step increments and positions can be easily adjusted to fill any gap. A ramp collision automatically fits the stairs, to provide smoother player collisions for movement.</p>
 							
 							
 							<h2 id="shader-anchor">Rendering - Dynamic Colour Quantisation and Dithering:</h2>

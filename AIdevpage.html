@@ -67,7 +67,9 @@
 								<li> <a href="#EQS-anchor">Environment Query System Usage</a> </li>
 								<li> <a href="#navigation-anchor">AI Navigation Foundations</a> </li>
 								<li> <a href="#door-anchor">AI - Door Interaction</a> </li>
+								<li> <a href="#door2-anchor">AI - Door Improvements</a> </li>
 								<li> <a href="#obstacle-anchor">Dynamic Obstacle-Navmesh Effects</a> </li>
+								<li> <a href="#light-anchor">Player Light-Visibility Testing</a> </li>
 							</ul>
 							
 							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
@@ -75,8 +77,7 @@
 							<a href="generic8.html">To see all development summaries, click here.</a>
 							<p></p>
 							
-							<h2 id="perception-anchor">AI Perception Improvement:</h2>
-														
+							<h2 id="perception-anchor">AI Perception Improvement:</h2>						
 							
 							
 							<p>The first step in AI work was to improve the way in which Unreal's perception system detects the player by sight.<br />
@@ -172,7 +173,19 @@ return false;
 							<p>After some fine-tuning in testing, this provided an ideal solution to believable interaction between the AI and doors.<br />
 							It even improved gameplay through the risk/reward of a player stopping to attempt to close doors behind them in order to slow down a pursuing AI.</p>
 							
-							<p>I am further experimenting with this in various ways, such as adding an additional navmodifier to encourage better AI movement around an open door being passed but not entered.</p>
+							<h2 id="door2-anchor">AI - Door Improvements:</h2>
+							
+							<span class="image main"><img src="images/AI_Door_Fix.png" alt="" /></span>
+							
+							<p>As I continued to test my system, I found a problem in my collisionless, entirely navmesh-driven approach to doors;<br />
+							AI controlled characters would happily pass through the mesh of an open door as they walk past the doorway.</p>
+							
+							<p>To solve this, an additional nav modifier was attached to the door mesh.<br />
+							This maintained the collisionless approach, and an increased navigation cost through doors encourages the AI to pass around them.<br />
+							This approach also ensured the AI could still pass through doors if absolutely necessary, avoiding any cases of becoming trapped due to unfortunate door movement.</p>
+							
+							<p>I also took this opportunity to add in proper handling of locked doors for the player and AI.<br />
+							This consisted of adding in more means of locking/unlocking doors, such as physical latches, and the ability for the AI to force a door open, rendering the lock inoperable in the process.</p>
 							
 							<h2 id="obstacle-anchor">Dynamic Obstacle-Navmesh Effects:</h2>
 							
@@ -191,6 +204,23 @@ return false;
 							When the AI was actively hostile to the player, partial and full obstacles lost all extra navigation cost, resulting in the most direct path being taken to catch the player.</p>
 							
 							<p>Whilst the navigation cost values required adjustment, this has proven suitable for altering the way the AI navigates the environment, based on player actions.</p>
+							
+							
+							<h2 id="light-anchor">Player Light-Visibility Testing:</h2>
+							
+							<p>To further develop the ways in which the AI detects the player, I developed a method for checking the player's exposure to light sources within the level.</p>
+							
+							<p>To track only the relevant lights, a collision volume on the player uses the beginning and end of overlap with light sources to add and remove them from the list of lights to test.<br />
+							Each light source is given its own implementation of a Blueprint Interfaceto determine the extent by which it can affect the player, and how.<br />
+							This was done so that light sources made within the editor - based on my C++ classes - can be set up by somebody without coding experience without issue.</p>
+							
+							<p>Each light adds to a "light detection value" of the player each tick, which ranges from zero illumination to a given maximum value.<br />
+							The light detection value is then matched against a curve by the AI Controller.<br />
+							This provides the final multiplier to the AI's detection of the player, altering the amount of time taken to recognise the player when they are visible.</p>
+							
+							<p>This method has proven suitable in testing.<br />
+							The use of a curve mapping the player illumination to detection time has allowed for easy adjustment in testing, and allows for more control than a basic linear interpolation.</p>
+							
 							
 							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
