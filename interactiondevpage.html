@@ -75,6 +75,7 @@
 								<li> <a href="#page-anchor">3D-Interactive Books</a> </li>
 								<li> <a href="#plank-anchor">Improved Object Carrying</a> </li>
 								<li> <a href="#double-anchor">Dual-Object Carrying Changes</a> </li>
+								<li> <a href="#overlay-anchor">Object Placement Improvements</a> </li>
 							</ul>
 							
 							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
@@ -85,7 +86,7 @@
 							<h2 id="interaction-anchor">Mechanic - 3D Interaction System:</h2>
 							<iframe width="1200" height="680"
 								
-								  <source src="images/InteractionDemoModern.mp4" type="video/mp4">
+								  <source src="images/UpdatedInteractionVideo.mp4" type="video/mp4">
 								
 							</iframe>
 							<p></p>
@@ -364,6 +365,26 @@ Momentum = FMath::Clamp(Momentum + InputAlignment, -MaxMomentum, MaxMomentum);
 							All dragging logic would be unaffected by the offhand carrying of an object.</p>
 							
 							<p>This proved to be a suitable design change, removing a frustrating element of gameplay.</p>
+							
+							<h2 id="overlay-anchor">Object Placement Improvements:</h2>
+							
+							<iframe width="723" height="463"
+								src="images/newvalve.gif">
+							</iframe>
+							
+							<p>As I put the new features through testing, issues were found with communicating to a player where objects can or should be placed, and how to do so.<br />
+							Where some objects were naturally intuitive to some players, others were less familiar with certain concepts, so more visual indicators were needed.</p>
+							
+							<p>The solution to this came in two parts;</p>
+							
+							<p>Firstly, when a carryable object was held, a highlight effect would be applied to all suitable objects it could be placed into.<br />
+							This effect faded with distance as to not illuminate objects across the entire map, and generally solved the issues of identifying where objects should go.</p>
+							
+							<p>Secondly, when an object begins to actually overlap the collision box of a suitable receptacle, an overlay effect is applied to indicate that it is now safe to let go of the object.<br />
+							This was required because of some players frequently letting go of an object too far away from a receptacle, often dropping an object on the floor and needing to step back and retrieve it.</p>
+							
+							<p>These changes have drastically improved player understanding of the mechanics in a visually pleasant way, whilst avoiding more direct text-explanations.</p>
+							
 							
 							
 							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>

@@ -60,6 +60,16 @@
 						<div class="inner">
 							<h1>Unreal Engine Five - Colour Quantisation, Dithering Development and other Visual Effects</h1>
 							
+							<p>Key points in feature development:</p>
+
+							<ul>
+								<li> <a href="#foundation-anchor">Initial Foundations</a> </li>
+								<li> <a href="#parameter1-anchor">Improved Passing of Data to Postprocessing</a> </li>
+								<li> <a href="#wobble-anchor">Applying Parameter Collections - Dynamic Vertex Snapping</a> </li>	
+								<li> <a href="#parameter2-anchor">Optimising Dynamic Materials for Objects through Custom Primitive Data</a> </li>		
+								<li> <a href="#overlay-anchor">Overlay Material Usage</a> </li>									
+							</ul>
+							
 							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
 							<a href="generic8.html">To see all development summaries, click here.</a>
@@ -96,7 +106,7 @@
 								src="images/dithernodes.jpg">
 							</iframe>
 							
-							<h2 id="parameter-anchor">Improved Passing of Data to Shaders:</h2>
+							<h2 id="parameter1-anchor">Improved Passing of Data to Postprocessing:</h2>
 							
 							<p>In my initial postprocessing work, I passed values through by creating a dynamic material instance for each postprocess.<br />
 							This required a fairly convoluted process by which the player character found a level's postprocess volume, replacing its materials with newly created dynamic material instances to which values would be passed.</p>
@@ -106,7 +116,7 @@
 							Because of this, I am able to apply my postprocesses directly to the player character's multiple cameras without needing multiple instances of each process, for each camera.<br />
 							This removes the need for a postprocess volume within every level, and gives me a tidier and more manageable setup.</p>
 							
-							<h2 id="wobble-anchor">Other Shader Effects:</h2>
+							<h2 id="wobble-anchor">Applying Parameter Collections - Dynamic Vertex Snapping:</h2>
 							
 							<p>With the utility of material parameter collections, I experimented with some other effects.<br />
 							Amongst these was emulating the "vertex snapping" of older hardware, scaling in its intensity based on the player's health.</p>
@@ -117,6 +127,64 @@
 							<p>This use of a material function allows me to easily add or remove this effect from any material and object I need without difficulty.<br />
 							Within the function, the camera-relative world position is divided, floored, and then multiplied by the scaled parameter.<br />
 							The result of this is subtracted from the relative world position to give the offset applied to the vertex.</p>
+							
+							<h2 id="parameter2-anchor">Optimising Dynamic Materials for Objects through Custom Primitive Data:</h2>
+							
+							<p>Initially, I enabled visual changes in objects such as switching the emissive texture of a light mesh, through the swapping of the mesh material.<br />
+							This poor approach was quickly replaced with the use of dynamic material instances, for which a scalar could be changed to interpolate between emissive textures.</p>
+							
+							<p>Wanting to further improve on this, I began utilising custom primitive data to pass information to a shader without even needing to create a dynamic material instance.</p>
+							
+							<p>This approach has worked wonderfully, and allows for the easy adjustment of these parameters within my C++ code.</p>
+							
+<pre>
+<code class="cpp-html">
+// Called during beginplay
+UPrimitiveComponent* SignalPrimitive = Cast<UPrimitiveComponent>(SignalLightMesh);
+
+// Called as required to change appearance
+SignalPrimitive->SetCustomPrimitiveDataFloat(1, 1.0f);
+</code>
+</pre>	
+							
+							<p>Custom primitive data is also well suited for working with instanced static meshes, wherein each instance may have its own custom primitive data.<br />
+							This bypasses the inability to assign different materials or material instances to the different mesh instances, which can be applied in all sorts of ways from object colour to more advanced methods.</p>
+							
+							<p>This is important due to the use of instanced meshes to reduce draw calls and improve performance.<br />
+							This bypasses the inability to assign different materials or material instances to the different mesh instances, which can be applied in all sorts of ways from object colour to more advanced methods.</p>
+							
+							<p>With this approach, I made various material "archetypes" for objects such as interactive buttons which glow when usable, to streamline my workflow.</p>
+							
+							<h2 id="overlay-anchor">Overlay Material Usage:</h2>
+							
+							<p>During my work, I found I sometimes needed to apply specific visual effects to numerous objects at some point during runtime, but did not want to factor this effect into the numerous materials of these objects.<br />
+							
+							<p>To solve this, I began using overlay materials, which can be applied and removed during runtime.</p>
+							
+							<p>Overlay materials create an additional draw call, and can be utilised for numerous visual effects. In my case, it is for applying a sheen effect to objects when they are in the right place for a purpose.<br />
+							By ensuring that overlay materials are removed after they are no longer needed, any performance impact is negligible, whilst the materials of the base-objects remain consistently simple.</p>
+							
+							<p>Overlay materials can also be managed in code, allowing me to manage their addition and removal within the component attached to an actor to grant object carrying logic.</p>
+							
+<pre>
+<code class="cpp-html">
+TArray<UStaticMeshComponent*> MeshComponents;
+GetOwner()->GetComponents(MeshComponents, true);
+
+for (UStaticMeshComponent* MeshComponent: MeshComponents)
+{
+    MeshComponent->SetOverlayMaterial(OverlayMaterial);
+}
+</code>
+</pre>
+
+							<p>This and the use of custom primitive data have been wonderful for creating more visually dynamic objects, for both better visuals and to better convey information to the player.</p>
+							
+							<iframe width="534" height="345"
+								src="images/fuseboxgif.gif">
+							</iframe>
+							
+							<p></p>
 							
 							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
