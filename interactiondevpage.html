@@ -60,6 +60,14 @@
 						<div class="inner">
 							<h1>Unreal Engine Five - Interaction System Development</h1>
 							
+							<h2 id="interaction-anchor">Mechanic - 3D Interaction System:</h2>
+							
+							<iframe width="1200" height="680" autoplay allowfullscreen frameborder="0";
+								src="https://www.youtube.com/embed/u5l1AqCYHaM">
+							</iframe>
+							
+							<p></p>
+							
 							<p>Key points in feature development:</p>
 
 							<ul>
@@ -83,29 +91,25 @@
 							<a href="generic8.html">To see all development summaries, click here.</a>
 							<p></p>
 							
-							<h2 id="interaction-anchor">Mechanic - 3D Interaction System:</h2>
-							<iframe width="1200" height="680"
-								
-								  <source src="images/UpdatedInteractionVideo.mp4" type="video/mp4">
-								
-							</iframe>
-							<p></p>
 							<h2 id="foundation-anchor">Initial Foundations:</h2>
 							
 							<iframe width="600" height="340"
 								src="images/objecthighlightgif.gif">
 							</iframe>
 							
-							<p>My first steps to developing the interaction system were to create a scene component attached to the player character’s camera to handle player-side logic.<br />
-							This would use raycasts to find the actor being looked at by the player, and check if this actor contained an interactor component-derived class or children of this class. These interactor component child classes will contain overrides of an interact function, to contain all interaction logic for the object.</p>
+							<p>My first steps to developing the interaction system were to create a  component attached to the player camera to handle player-side logic.<br />
+							This uses raycasts to find actors being looked at by the player, and check if an actor contains an interactor component or child of its class.<br />
+							The interactor component family would make strong use of polymorphism to handle all interaction logic for objects.</p>
 							
-							<p>A highlight effect is applied to interactable objects when they are looked at, confirming them as the currently “locked in” interactable. The locked in interactable is changed either when the player looks at a new interactable object, or if they are not looking directly at any acceptable objects for a sufficient amount of time.<br />
-							This was done for player convenience, to reduce the effect of misinputs like slightly overshooting an object with the mouse before pressing the interact key. The time for this deselection was made accessible and changeable in the editor, for ease of adjustment.</p>
+							<p>The currently selected object receives a highlight effect. Selection changes when another object it looked at, or the player looks away.<br />
+							For convenience, the time to deselect from looking away is adjustable, this sort of coyote time approach helps make small objects less fiddly.</p>
 							
-							<p>The first form of interaction was an interactor component child class that would send a message to the player when used. This appeared to be a reasonable and uncomplicated starting point.<br />
-							For this the means to add a message widget to the player screen was added, through a function taking both the text to display and the time it should display for as parameters.<br />
-							This created a problem of rapid interaction potentially displaying multiple instances of the widget to the screen at the same time, which was solved by instead keeping only one instance of the widget in use at any one time, which is deleted and replaced if the function is called again.<br />
-							Other functionality such as an object that would interpolate into a position in front of the player’s view, and allow free rotation to inspect and interact with details, was tested and whilst it did not survive into later versions, features such as switching to mouse cursor-based interaction would be reused.</p>
+							<p>The first interactor component child class sent a message to the player when used.<br />
+							For this, I added a way to add message widgets to the screen, given message text and the time to display.<br />
+							To stop multiple messages overlapping, the current widget instance is tracked and replaced if a new one is sent.</p>
+							
+							<p>At this point I experimented with features like holding and rotating interactive objects.<br />
+							The feature at large didnt last, but it was the first use of the cursor, which was expanded on.</p>
 							
 							<h2 id="cursor-anchor">Mouse/Cursor Interaction:</h2>
 							
@@ -113,16 +117,16 @@
 								src="images/cursoricons.gif">
 							</iframe>
 							
-							<p>After the foundational steps, the first feedback and design requests were given. The major feature to be added was the ability to toggle between ordinary mouse controls, and aiming at an object to interact with it, and replacing mouse-turning with a mouse cursor, which could hover over objects in order to select and interact with them.</p>
+							<p>The next step was to let the player toggle between normal mouse control, and using a cursor whilst still able to move around.</p>
 							
-							<p>My approach to this was to add a widget of toggleable visibility for the cursor, in place of toggling the real mouse cursor’s visibility.<br />
-							This was done so that I could build upon this to add features such as context-sensitive changing of the cursor icon more easily.<br />
-							Cursor-mode is activated and deactivated through the holding and release of a key, and for its duration the ordinary mouse input to the player character for looking is disabled. The cursor would fire rays for interactable object detection based on its position on the screen.</p>
+							<p>In place of toggling the real mouse cursor’s visibility, a widget is used.<br />
+							This was done so that I could expand this to add features such as context-sensitive changing of the cursor icon more easily.<br />
+							The cursor is toggled by holding a key. Its position on the screen is used to fire rays, instead of where the camera looks directly.</p>
 							
-							<p>Once the cursor mode was implemented, I added the means for the cursor icon to change based on the type of interactable object that was locked in for interaction. This was achieved by adding a function to the interactor classes that would be called upon locking in of the selector.<br />
-							Each interactor child class could then set the relevant cursor icon from a selection within the widget, and carry out any other necessary actions.</p>
+							<p>Once the cursor mode was set up, I added dynamic cursor icon changing based on the type of interactable object selected.<br />
+							I did this by adding a function to the interactor component, so each child class could set a suitable cursor icon.</p>
 							
-							<p>Finally, to allow for a degree of camera rotation whilst in cursor mode, I implemented a check whilst in cursor mode that would apply rotation if the cursor was sufficiently close to any edge of the screen within editor-set boundaries, enabling deliberate rotation by the player.</p>
+							<p>Finally, to allow for camera rotation in cursor mode, I added a check that would apply rotation if the cursor was sufficiently close to any edge of the screen.</p>
 							
 							<h2 id="dragging1-anchor">First Implementation of Object Dragging:</h2>
 							
@@ -133,13 +137,21 @@
 							<p>The key feature request after the implementation of a cursor mode was the ability to drag objects, such as draws and hinged doors.<br />
 							This feature would be heavily iterated upon.</p>
 							
-							<p>A parent draggable interactor class was made to hold the dragging logic shared between all draggable objects. This would handle all but the actual movement of the object, for which specific child classes would be made for different movement types.<br />
-							Dragging would be initiated by the holding of the interact button whilst a draggable object is locked in. I was using Unreal Engine’s Enhanced Input Action Mapping, which allowed for easy discerning between a tap or hold of the same key for different purposes.</p>
+							<p>A parent draggable interactor class was made to hold the dragging logic shared between all draggable objects.<br />
+							Specific child classes would handle different types of movement, such as hinged doors compared to draws.<br />
+							Dragging is initiated by holding the interact button on a selected draggable object.<br />
+							I used Unreal Engine’s Enhanced Input Action Mapping, which allowed for easy discerning between a tap or hold of the same key for different purposes.</p>
 							
-							<p>These draggable interactors would receive an input vector and use a dot product to compare this vector against its object’s direction vector. The greater the two vectors align, the more the interactor will move forwards or backwards between its two end-points of movement, leading to movement in the direction of one of these end points.<br />
-							In this first implementation, the input vector would come purely from mouse movement, in either standard or cursor mode. The vector was produced using the player camera, and by extension its interactor component’s up and right vectors multiplied by mouse input values.<br />
-							This produced a problem in that if the player’s view aligned enough with the object direction vector, then input could only be given in directions that would not induce movement.<br />
-							To solve this, I produced a second input vector that turned mouse up/down movement into the forwards/backwards direction and mixed these two input vectors based on a dot product of the player camera forward vector and the draggable object direction vector. Hence, the more the player view and direction vector align, the more the alternate vector is used for drag-input instead, solving the problem.</p>
+							<h4>Code - Dragger Input Handling:</h4>
+							
+							<p>The interactor would receive a vector from the player's mouse movement, and use a dot product to compare this vector against its object’s direction vector.<br />
+							The more the two vectors align, the more the interactor will move forwards or backwards between its end-points of movement.<br />
+							In this version, the input vector came purely from mouse movement. The vector was produced using the player camera’s up and right vectors multiplied by mouse input values.</p>
+							
+							<p>This produced a problem, if the player’s view aligned enough with the object direction vector, input could only be given in directions that would not induce movement.<br />
+							To solve this, a second input vector was made that turned mouse up/down movement into the forwards/backwards direction.<br />
+							These two input vectors were mixed based on a dot product of the player camera forward vector and the draggable object direction vector.<br />
+							Hence, the more the player view and direction vector align, the more the alternate vector is used for drag-input instead, solving the problem.</p>
 							
 <pre>
 <code class="cpp-html">
@@ -162,9 +174,10 @@ InputAlignment = InputAlignment * MovementScale * Scalar;
 </code>
 </pre>
 							<p>AlternateInputVector here is the alternate mapping of mouse movement to 3D direction for when the player and movement vector greatly align.<br />
-							CursorMode indicated whether the player is using their cursor, in which case a different scalar is applied.</p>
+							CursorMode indicates whether the player is using their cursor, in which case a different scalar is applied.</p>
 							
-							<p>This first implementation marked a milestone in progress, but also highlighted several problems to me, such as the current highlighting method showing the object through other surfaces, but also the way in which cursor movement did not properly match the movement of the object being dragged. Furthermore, there was a lack of momentum within dragged objects if they were released mid-movement.</p>
+							<p>This first implementation was a milestone in progress, but also highlighted several problems such as the current highlighting method showing through other surfaces, but also the way in which cursor movemed separately from the object being dragged.<br />
+							Furthermore, there was a lack of momentum within dragged objects if they were released mid-movement.</p>
 							
 							
 							<h2 id="dragging2-anchor">Object Dragging – Momentum:</h2>
@@ -173,32 +186,35 @@ InputAlignment = InputAlignment * MovementScale * Scalar;
 								src="images/momentum.gif">
 							</iframe>
 							
-							<p>To achieve the impression of momentum in dragged objects, I made the draggable interactor class record its last change in progress between end-points, and if dragging ceases, to instead move itself using this recorded value, which will decrease towards zero over time based on a given deceleration rate.<br />
-							This initially caused issues due to this value only updating when input was received, which it could then act on even if the object had come to a stop before the dragging was terminated. Hence, a check was added to remove this momentum value if the object became stationary whilst being dragged.</p>
+							<p>To create the impression of momentum in dragged objects, I made the draggable interactor class record its last change in progress.<br />
+							If dragging ceases, it instead moves itself using this recorded value, which will decrease towards zero over time based on a given deceleration rate.<br />
+							The first version of this had issues due to this value only updating when input was received, causing occasional jump starts when released.<br />
+							Hence, a check was added to remove this momentum value if the object became stationary whilst being dragged.</p>
 							
 							<h2 id="highlight1-anchor">Object Highlight Improvements:</h2>
 							
-							<p>The initial object highlight method was functional but found unsuitable due to it highlighting the entire object, including that which was behind other geometry.<br />
-							This method uses UE5’s custom depth buffer, in which only highlightable objects have rendering their custom depth enabled, the buffer then being used for a simple edge detection method comparing the presence or lack thereof of custom depth buffer values.<br />
-							To improve upon this, I added the sampling of the standard depth buffer, and its comparison with the custom depth buffer in order to consider only parts of the object that were unoccluded by other geometry.<br />
+							<p>The initial object highlight method was functional but found unsuitable due to it highlighting behind other geometry.<br />
+							This method uses UE5’s custom depth buffer, in which only highlightable objects have rendering their custom depth enabled.<br />
+							The buffer is then used for a simple edge detection method comparing the presence or lack thereof of custom depth buffer values.</p>
+							
+							<p>To improve this, the custom depth buffer is compared with the standard depth buffer, ignoring occluded parts of the object.<br />
 							This has proven successful, and laid the foundations for further improvements.</p>
 							
 							<span class="image main"><img src="images/outlines.jpg" alt="" /></span>
 							
 							<h2 id="dragging3-anchor">Object Dragging Input Expansion:</h2>
 							
-							<p>Whilst mouse input had been suitable adjusted for use controlling dragging, it was decided to also factor player movement whilst dragging into the movement of the object.<br />
-							Hence, player movement input would also send input vectors to the draggable interactor derived from the input combined with the player character forward and right vectors.<br />
-							This, along with all other input, would be multiplied by values changeable within the editor for easy adjustment of sensitivity to different input types. These could also be used to alter drag input/player movement speed depending on both the cursor mode and if dragging was underway.</p>
+							<p>Whilst mouse input could be used decently to control dragging, I wanted to factor in player movement whilst dragging objects.<br />
+							Hence, player movement would also send input vectors to the draggable interactor.<br />
+							This along with all other input would be multiplied by values changeable within the editor for easy adjustment of sensitivity.<br />
+							These could also tweak drag input/player movement speed depending on both the cursor mode and if dragging was underway.</p>
 							
 							<h2 id="cursor2-anchor">Mouse Cursor Following Points in 3D Space:</h2>
 							
-							<p>To solve the lack of correlation between draggable object and mouse cursor movement, significant changes had to be made.<br />
-							Firstly, a second cursor widget was created purely for dragging objects. Whenever a draggable object is locked in for interaction, the last point of contact between the player and the object is saved.<br />
-							When dragging is initiated, this point of contact is turned into an offset relative to the dragged object, as to follow it as it moves. This point of contact in world space may then be translated into a screen space position, used to set the location of the dragging cursor widget.<br />
-							Hence, this cursor will accurately stick to the dragged object in the place it was grabbed for as long as it is held.<br />
-							When dragging is terminated, the standard cursor widget resumes use. This initially caused an issue in that the cursor would reappear in the real mouse cursor’s position on-screen, which was not where the dragging cursor was last visible.<br />
-							To solve this, when dragging is terminated, the same screen-space position used to set the position of the dragging cursor is used to set the position of the mouse, and by extension the cursor widget that follows it.</p>
+							<p>To finally fix the disconnect between draggable object and mouse cursor movement, significant changes had to be made.<br />
+							A second cursor widget was made purely for dragging objects. Whenever a draggable object is locked in for interaction, the last point of contact between the player and the object is saved.<br />
+							This point's offset is saved, and moves with the actor, and is translated into screenspace to position the cursor widget.<br />
+							When dragging is terminated, the same screen-space position is used to place the normal cursor widget in its place.</p>
 							
 							<iframe width="600" height="340"
 								src="images/dragcursor.gif">
@@ -218,9 +234,11 @@ InputAlignment = InputAlignment * MovementScale * Scalar;
 							
 							<h2 id="dragging4-anchor">Further Improvement of Draggable Object Movement:</h2>
 							
-							<p>To create a smoother and more "weighty" reponse in draggable objects, I tested a new way of handling object movement.<br />
-							Where previously object momentum was reserved for movement after the player had released the object, it would now be the sole driving force in moving the object, where the player contributes to it via input, and the momentum naturally moves towards zero.<br />
-							During the implementation of this new method, I also improved on a previous design choice, by moving all input multipliers for different player conditions from the player character to the draggable object, allowing for better fine tuning of individual objects.<br />
+							<p>To create smoother and more "weighty" handling of draggable objects, I tested a new way of handling object movement.<br />
+							Previously object momentum only applied after the player had released the object. It would now be the sole driving force moving the object.<br />
+							The player contributes to it via input, and the momentum naturally moves towards zero.</p>
+							
+							<p>Whilst adding this new method, I also improved on a previous design choice, by moving all input multipliers from the player character to the draggable object, allowing me to fine tune individual objects to handle differently.<br />
 							This, after the tweaking of some parameters, produced smoother and overall better object movement.</p>
 							
 							<iframe width="800" height="600"
@@ -228,20 +246,19 @@ InputAlignment = InputAlignment * MovementScale * Scalar;
 							</iframe>
 							<p></p>
 							
-							<p>I also reenabled the player rotation from the cursor being close to the edge of the screen for dragging, because this produced smoother movement and allowed the player to continue to follow an object better.<br />
-							The rate of rotation was also changed to increase the closer the cursor gets to the edge, to create smoother movement compared to the original "on/off" state of turning.</p>
+							<p>I reenabled player rotation from the cursor being close to the screen edge, this produced smoother movement and let the player follow a moving object better.<br />
+							The rate of rotation was changed to increase the closer the cursor gets to the edge, creating smoother movement compared to the original "on/off" state of turning.</p>
 							
 							<iframe width="600" height="340"
 								src="images/cursordrift.gif">
 							</iframe>
 							<p></p>
 							
-							<p>After this, I set about implementing basic UI features like a pause screen, start menu and options menu. These are not final, but rather implemented in this state for ease of testing, and because having no proper way to close the game when testing a packaged version was inconvenient. <br />
-							Some minor problem solving was required, such as opting to terminate dragging and cursor mode when pausing, due to their shared use of the cursor with the pause screen.</p>
+							<p>As I implemented my first UI elements, some minor problem solving was required, such as opting to terminate dragging and cursor mode when pausing, due to their shared use of the cursor with the pause screen.</p>
 							
-							<p>At this point, a brief demo had been made to practise using the current features in an environment more resembling a game than a testing-room.<br />
-							This has been done using purpose-made assets, and has given good practise in using other parts of the engine.<br />
-							It has also helped to identify additional small issues or bugs in order to fix them, alongside needs like changing the capsule collision size for the player character to be suitable to a more cramped environment.</p>
+							<p>At this point, a brief demo was made to practise using the current features in an environment more resembling a game than a testing-room.<br />
+							This was done using purpose-made assets, and gave good practise in using other parts of the engine.<br />
+							It also helped to identify small issues or bugs, alongside needs like changing the capsule collision size for the player character to be suitable to a more cramped environment.</p>
 							
 							<iframe width="600" height="340"
 								src="images/drawerdemogif.gif">
@@ -255,15 +272,18 @@ InputAlignment = InputAlignment * MovementScale * Scalar;
 							</iframe>
 							<p></p>
 							
-							<p>A key feature request following the new demo room and features was the ability to pick up and carry objects, in a way that did not disrupt other interaction mechanics.<br />
-							To achieve this, I started with an editor-changeable offset for holding a carried object below the centre of the screen using a physics handle. Interacting with a suitable object would toggle carrying it.<br />
-							This solved picking up and carrying an object whilst leaving the cursor free to interact with objects, open doors and so on.<br />
-							However, putting the object down was limited to interacting to drop it from its carrying position, which was unsuitable due to it typically dumping your object onto the floor.<br />
-							To solve this, I implemented a way of precisely positioning the object before releasing it.<br />
-							If dragging is initiated on the object, similar to moving doors and drawers, then the target position for the physics handle is set by the result of a raycast based on cursor position on the screen.<br />
-							The point of impact for the ray then has a further offset applied, in the direction of the surface normal of the ray-hit position. This helps to slightly float the object above a surface until it is released, and reduced unwanted collisions when moving the object around sharp corners.<br />
-							Other edge cases involving a lack of ray collision were accounted for as well, to prevent any unwanted behaviour.<br />
-							This solution has so far proven suitable, though I would like to explore any ways to further improve it. A video of this system can be found at the top of the page.</p>
+							<p>A key feature request after the demo room was the ability to pick up and carry objects, in a way that did not disrupt other interaction mechanics.<br />
+							For this, I used an editor-changeable offset for holding a carried object below the centre of the screen using a physics handle.<br />
+							Interacting with a suitable object would toggle carrying it.<br />
+							This worked, but putting the object down was limited to dropping it from its carrying position, typically dumping your object onto the floor.</p>
+							
+							<p>To solve this, I implemented a way of precisely positioning the object before releasing it.<br />
+							If dragging is initiated on the object then the physics handle target is set by a raycast based on cursor screen position.<br />
+							The point of ray impact then has an offset applied in the direction of the surface normal of the hit position.<br />
+							This slightly floats the object above a surface until it is released, and reduces unwanted collisions when moving the object around sharp corners.</p>
+							
+							<p>Other edge cases involving a lack of ray collision were accounted for as well, to prevent any unwanted behaviour.<br />
+							This solution has so far proven suitable, though I would like to explore any ways to further improve it.</p>
 							
 							
 							<h2 id="breaker-anchor">Further Applications of Mechanics:</h2>
@@ -272,11 +292,12 @@ InputAlignment = InputAlignment * MovementScale * Scalar;
 								src="images/keypadgif.gif">
 							</iframe>
 							
-							<p>Following the completion of previous features, I set out to build on them so that they can be used to affect their environment, and be used to create interaction puzzles.<br />
-							The first step was to improve the components that add dragging logic to objects like draws and doors, to define the limits of and recognise when an object enters or exits its limits of movement.<br />
-							This allowed the component to be used for objects such as levers or breaker switches. Whilst initial testing of this was done using event dispatchers, I have switched to the use of delegates in C++ to remove blueprint use in game logic.<br />
-							After this, a testing scene was made using the new functionality on a breaker switch, to toggle the power to a room's lighting and a keypad needed to unlock a door.<br />
-							This keypad utilises a widget component, in which all widget logic was done in C++. The keypad was made both for creating a device interacted with in the game world instead of reducing player immersion through filling the screen with a buttoned widget, but also to begin practise for the following feature.</p>
+							<p>I wanted to build on my system so interaction components could be used as building blocks in interactive machines and puzzles.<br />
+							The first step was to improve dragger components, to recognise when an object enters or exits its limits of movement.<br />
+							I could use this for objects such as levers or breaker switches. I used C++ delegates to let these components communicate with the rest of the level.</p>
+							
+							<p>I tested this new functionality with a breaker switch, that toggled the power to a room's lighting and a keypad needed to unlock a door.<br />
+							The keypad was made of interactive buttons and a widget component, to avoid unimmersive popup widgets filling the screen.
 							
 							
 							<h2 id="wheel-anchor">Accurate 3D Valve-Interaction:</h2>
@@ -286,12 +307,12 @@ InputAlignment = InputAlignment * MovementScale * Scalar;
 							</iframe>
 							<p></p>
 							
-							<p>As I expanded on my interaction system, I noted the need to interact with circular objects like valves.<br />
-							The existing method for hinged objects couldn't be applied to these, because the hinged objects rely on a vector indicating the "forward" direction that a door or lever is facing in.</p>
+							<p>As I expanded on my interaction system, I noted the need to interact with axel-based objects like valves.<br />
+							The existing method for hinged objects couldn't be used, because hinged objects rely on a vector indicating the "forward" direction that a door or lever is facing in.</p>
 							
-							<p>Hence, I set out to make a method that considers the player's mouse movement, relative to the point on the wheel by which they are holding it.<br />
-							This involved creating a vector perpendicular to the axis of rotation, moving from it to the point-of-holding. From this and the axis of rotation, a vector perpendicular to both can be created.<br />
-							This gives a vector that is tangential to the circle and perpendicular to the axis of rotation, by which to compare the player input direction against.</p>
+							<p>Hence, I had to make a method that considers the player's mouse movement relative to the point on the wheel by which they are holding it.<br />
+							This involved creating a vector perpendicular to the axis of rotation, between it and the point-of-holding. From this and the axis of rotation, a vector perpendicular to both can be created.<br />
+							This gives a vector that is tangential to the circle and perpendicular to the axis of rotation, against which to compare the player input.</p>
 							
 <pre>
 <code class="cpp-html">
@@ -321,7 +342,7 @@ Momentum = FMath::Clamp(Momentum + InputAlignment, -MaxMomentum, MaxMomentum);
 </code>
 </pre>
 							
-							<p>This has worked perfectly, creating a wheel that will respond accurately to input based on the position of the wheel this force is applied from.<br />
+							<p>This has worked well, creating a wheel that will respond accurately to input based on the position of the wheel this force is applied from.<br />
 							Other factors like the number of possible rotations are all parameterised for ease-of-use.</p>
 							
 							
@@ -334,11 +355,11 @@ Momentum = FMath::Clamp(Momentum + InputAlignment, -MaxMomentum, MaxMomentum);
 							</iframe>
 							<p></p>
 							
-							<p>As a gameplay demo based around terminal usage developed, the need for a manual developed.<br />
-							The first step was the creation of an interaction component for interpolating into an "active" position, with ability for interruption to smoothen usage.</p>
+							<p>As a gameplay demo based around terminal usage developed, I needed to make an interactive manual.<br />
+							The first step was creating an interaction component for interpolating objects like books between the table and a raised position.</p>
 							
 							<p>The first manual iteration changed pages through arrow key usage, which was functional but unsuitable as these keys were to be used by the terminal.<br />
-							Hence, a second version was developed with 3D, physically turned pages using the interaction system., and capable of pushing each other.</p>
+							Hence, a second version was developed with 3D, physically turned pages using the interaction system, these pages were also capable of pushing each other.</p>
 							
 							<p>This has proven suitable, and allows for more immersive interaction whilst freeing keys for use by the terminal</p>
 							
@@ -349,7 +370,7 @@ Momentum = FMath::Clamp(Momentum + InputAlignment, -MaxMomentum, MaxMomentum);
 								src="images/planks.gif">
 							</iframe>
 							
-							<p>I decided to revisit and improve the carrying system, starting with parametrization of the carry component.<br />
+							<p>I revisited and improved the carrying system, starting with parametrization of the carry component.<br />
 							This was done so that each object could have its own values for features like the carrying position, or offset from a surface when held against it.</p>
 							
 							<p>Most of the carrying logic was then moved into the component itself, so that I could add more functionality to held objects.<br />
@@ -373,15 +394,15 @@ Momentum = FMath::Clamp(Momentum + InputAlignment, -MaxMomentum, MaxMomentum);
 							</iframe>
 							
 							<p>As I put the new features through testing, issues were found with communicating to a player where objects can or should be placed, and how to do so.<br />
-							Where some objects were naturally intuitive to some players, others were less familiar with certain concepts, so more visual indicators were needed.</p>
+							Where some objects were naturally intuitive to some players, others were less familiar, so more visual indicators were needed.</p>
 							
 							<p>The solution to this came in two parts;</p>
 							
 							<p>Firstly, when a carryable object was held, a highlight effect would be applied to all suitable objects it could be placed into.<br />
 							This effect faded with distance as to not illuminate objects across the entire map, and generally solved the issues of identifying where objects should go.</p>
 							
-							<p>Secondly, when an object begins to actually overlap the collision box of a suitable receptacle, an overlay effect is applied to indicate that it is now safe to let go of the object.<br />
-							This was required because of some players frequently letting go of an object too far away from a receptacle, often dropping an object on the floor and needing to step back and retrieve it.</p>
+							<p>Secondly, when an object overlaps the collision box of a suitable receptacle, an overlay effect is applied to indicate that it is safe to let go of the object.<br />
+							This was required because of some players frequently letting go of an object too far away, dropping it on the floor and needing to step back and retrieve it.</p>
 							
 							<p>These changes have drastically improved player understanding of the mechanics in a visually pleasant way, whilst avoiding more direct text-explanations.</p>
 							

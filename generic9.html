@@ -58,7 +58,16 @@
 						<div class="inner">
 							<h1>Unreal Engine Five - C++ Development - Key Features</h1>
 							
-							<p>The key features of my UE5 progress</p>
+							<iframe width="1200" height="680" autoplay allowfullscreen frameborder="0";
+								src="https://www.youtube.com/embed/4np51HVe468">
+							</iframe>
+							
+							<p></p>
+							
+							<p>Through this project, I have familiarised myself with Unreal Engine and practised using C++ for game development.<br />
+							This involved the design, development and iteration of numerous game mechanics, made for ease of use by game/level designers within the editor.</p>
+							
+							<p>Some key features of my UE5 development:</p>
 
 							<ul>
 								<li> <a href="#interaction-anchor">Mechanic - 3D Interaction System</a> </li>
@@ -74,10 +83,8 @@
 							
 							
 							<h2 id="interaction-anchor">Mechanic - 3D Interaction System:</h2>
-							<iframe width="1200" height="680"
-								
-								  <source src="images/UpdatedInteractionVideo.mp4" type="video/mp4">
-								
+							<iframe width="1200" height="680" autoplay allowfullscreen frameborder="0";
+								src="https://www.youtube.com/embed/u5l1AqCYHaM">
 							</iframe>
 							
 							<section class="tiles">
@@ -99,40 +106,46 @@
 							<h3 id="interaction-main-anchor">Key Features:</h3>
 							
 							<p>The interaction system allows for a player to observe, interact with and manipulate their environment using both their default camera view and a cursor.<br />
-							This may be used to move objects in 3D space, such as doors, draws and valves.</p>
+							This considers player input relative to where the object is held in 3D space, making for more immersive handling of doors, valves and more.</p>
 							
 							<h3 id="interaction-basic-anchor">General Interaction:</h3>
 							
-							<p>Object interaction is based around a number of components that contain all needed interaction logic, for simple use by non-coders within the editor.<br />
-							When a valid object enters the path of the reticule/cursor, it becomes locked in for interaction and highlighted, until a replacement object is found or the player looks away for long enough.<br />
-							A locked-in object may be observed to receive information, or interacted to carry out the logic of its interaction component.</p>
+							<p>Object interaction is built around a family of components that contain all needed interaction logic, for simple use by non-coders within the editor.<br />
+							When an object falls under the reticule/cursor, it is highlighted for interaction, until a new object is found or the player looks away for long enough.<br />
+							Objects may be "observed" to receive information, or interacted to carry out the logic of its interaction component.</p>
 							
 							<p>This may be applied to anything from general scenery with observation messages, to moving parts like buttons on machinery.</p>
 							
 							
 							<h3 id="interaction-drag-anchor">Manipulating Moving Actors:</h3>
 							
-							<p>The system may be used to grab and manipulate moving actors in the game world, gripping the object in 3D space and translating player mouse movement into 3D space by which to apply momentum.<br />
+							<iframe width="700" height="445"
+								src="images/DraggingLockerDraw.gif">
+							</iframe>
+							
+							<p>The system may be used to manipulate actors in the game world, gripping the object by a point in 3D space and translating mouse movement into a vector relative to this point, by which to apply force.<br />
 							This works for both angular and direct movement, lending itself to all variety of objects from carefully opening doors to searching drawers.</p>
 							
 							
 							<h3 id="interaction-valve-anchor">Accurate Valve Movement:</h3>
 							
-							<p>The system also supports rotating axel-based rotation for objects such as valves.<br />
-							For these the player input direction is considered relative to the place in 3D space by which the valve is held, when determining which direction to move in.</p>
+							<iframe width="723" height="463"
+								src="images/newvalve.gif">
+							</iframe>
 							
+							<p>The system also supports axel-based rotation for objects such as valves.<br />
+							This is achieved by generating a vector tangential to the valve from the holding point, to tell if force is clockwise or anticlockwise.</p>
 							
 							<h3 id="interaction-carry-anchor">Carrying and Placing Actors:</h3>
 							
-							<p>Suitable objects may be picked up, moved and precisely placed through the interaction system.<br />
-							This includes the means to store an object in a "passive" position to free the cursor for manipulating the environment, and using it to precisely place an object on a surface.</p>
+							<p>Objects may be picked up, moved and precisely placed through the interaction system.<br />
+							The player can store objects in a "passive" position to free the cursor for manipulating the environment.<br />
+							Both the reticule and cursor can be used to precisely place objects.</p>
 							
 							
 							<h2 id="terminal-anchor">Mechanic - Computer Terminal System:</h2>
-							<iframe width="1200" height="680"
-								
-								  <source src="images/UpdatedTerminalDemo.mp4" type="video/mp4">
-								
+							<iframe width="1200" height="680" autoplay allowfullscreen frameborder="0";
+								src="https://www.youtube.com/embed/VsrlListjpw">
 							</iframe>
 							
 							<section class="tiles">
@@ -153,8 +166,8 @@
 							
 							<h3 id="terminal-main-anchor">Key Features:</h3>
 							
-							<p>The terminal system allows the player to interact with a 3D terminal in the game-world<br />
-							This may be done through their own key inputs or a 3D keyboard in-game, to affect their environment.</p>
+							<p>The terminal system allows the player to interact with a 3D terminal in the game-world to affect their environment.<br />
+							This may be controlled through their own key inputs or a 3D keyboard in-game, using the cursor.</p>
 							
 							<p>The system is able to find the exact incorrect parameter to report, if an entered command is invalid.<br />
 							Otherwise, the command and its constituent parameters may be passed along for affecting the game-world.</p>
