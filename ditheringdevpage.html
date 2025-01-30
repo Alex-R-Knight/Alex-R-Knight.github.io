@@ -76,7 +76,7 @@
 							<p></p>
 							
 							<h2 id="terminal-anchor">Rendering - Dynamic Colour Quantisation and Dithering:</h2>
-							<iframe width="1200" height="680"
+							<iframe width="1598" height="680"
 								src="images/VariableQuality.jpg">
 							</iframe>
 							<p></p>
@@ -87,17 +87,17 @@
 							
 							<p>To begin with, I implemented postprocessing to downsample the source image, and quantise the image colour.<br />
 							From here, I use Bayer noise to apply dithering to the quantisation values, helping to smooth the transition between quantised colours and create colour gradients.<br />
-							The quantisation number for each colour may be set individually, to help demonstrate the visual difference of different quantisation amounts, here is a blue block on a red brick floor, in which red has a notably increased quantisation number:</p>
+							The quantisation number for each colour may be set individually, and changed during runtime for effects.</p>
 							
-							<iframe width="1200" height="680"
-								src="images/DitherColours.jpg">
-							</iframe>
-							
-							<p>From here, I decided to experiment with applying different amounts of downsampling and quantisation based on information in Unreal Engine's custom stencil buffer<br />
-							This way, I could selectively increase the fidelity of desired elements, such as user interfaces and objects that are currently in player focus.<br />
+							<p>I decided to experiment with applying different downsampling and quantisation based on information in Unreal Engine's custom stencil buffer<br />
+							This let me selectively increase the fidelity of elements such as user interfaces and objects that are currently in player focus.<br />
 							I found this method to work suitably, allowing UI elements to be presented in the same style as their surroundings but without harming their legibility.</p>
 							
-							<p>Whilst I have experience in writing rendering code from my Global Illumination Project, UE5 appeared oriented towards a node-based system for creating post-processing methods.<br />
+							<iframe width="1598" height="680"
+								src="images/PaintingDither.jpg">
+							</iframe>
+							
+							<p>Whilst experienced in writing rendering code from my Global Illumination Project, I prototyped the material entirely with the engine's node-based system.<br />
 							Hence, I adapted my understanding to the required node-system, utilising material functions where possible in place of repeated-use functions.</p>
 							
 							<p>This presented some issues like a seeming lack of matrices within the editor, which I found solutions to such as the reading of a texture to provide the noise values used for dithering.</p>
@@ -108,13 +108,22 @@
 							
 							<h2 id="parameter1-anchor">Improved Passing of Data to Postprocessing:</h2>
 							
-							<p>In my initial postprocessing work, I passed values through by creating a dynamic material instance for each postprocess.<br />
-							This required a fairly convoluted process by which the player character found a level's postprocess volume, replacing its materials with newly created dynamic material instances to which values would be passed.</p>
+							<p>In my early work, I passed values through by creating a dynamic material instance for each postprocess.<br />
+							This required a convoluted process by which the player character found a level's postprocess volume, replacing its materials with newly created dynamic material instances.</p>
 							
 							<p>Hence, I began using Material Parameter Collections.<br />
 							These proved far more suitable to work with. All shaders may freely draw from these collections without the need to set up dynamic instances.<br />
-							Because of this, I am able to apply my postprocesses directly to the player character's multiple cameras without needing multiple instances of each process, for each camera.<br />
+							Because of this, I could apply my postprocesses to the player character's multiple cameras without managing material instances of each process.<br />
 							This removes the need for a postprocess volume within every level, and gives me a tidier and more manageable setup.</p>
+							
+							<h2 id="hlsl-anchor">HLSL Usage in Materials:</h2>
+							
+							<iframe width="1600" height="757"
+								src="images/ImprovedMaterial.jpg">
+							</iframe>
+							
+							<p>With the entirely node-based prototype working, I revisited it and rewrote large portions with HLSL, to tidy up and optimise my most computationally intensive postprocess.<br />
+							This change reduced computational cost of the material and made it far more readable than the previous node-spaghetti.</p>
 							
 							<h2 id="wobble-anchor">Applying Parameter Collections - Dynamic Vertex Snapping:</h2>
 							
