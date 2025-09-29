@@ -42,16 +42,16 @@
 						<h2>Menu</h2>
 						<ul>
 							<li><a href="index.html">Home</a></li>
-							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
-							<li><a href="generic9.html">Unreal Engine C++ Key Features</a></li>
-							<li><a href="generic8.html">Unreal Engine C++ Progress Logs</a></li>
-							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
-							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
-							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="ScreenSpaceEffects.html">Screen-Space Effects and Extra</a></li>
+							<li><a href="UnrealGame.html">Unreal Engine C++ Key Features</a></li>
+							<li><a href="UnrealFeatureHub.html">Unreal Engine C++ Progress Logs</a></li>
+							<li><a href="gamemod.html">Game Total-Conversion Project</a></li>
+							<li><a href="modextra.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="EditorTools.html">Unreal Engine Editor Tools</a></li>
 							<li><a href="lowlevelpage.html">C++ Low Level Programming</a></li>
-							<li><a href="generic3.html">Team Project</a></li>							
-							<li><a href="generic2.html">Game Project</a></li>
-							<li><a href="generic.html">Graphics Project</a></li>
+							<li><a href="TeamProject.html">Team Project</a></li>							
+							<li><a href="GoatProject.html">Game Project</a></li>
+							<li><a href="OpenGLProject.html">Graphics Project</a></li>
 						</ul>
 					</nav>
 
@@ -72,20 +72,28 @@
 								<li> <a href="#light-anchor">Player Light-Visibility Testing</a> </li>
 							</ul>
 							
-							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<a href="UnrealGame.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
-							<a href="generic8.html">To see all development summaries, click here.</a>
+							<a href="UnrealFeatureHub.html">To see all development summaries, click here.</a>
 							<p></p>
+							
+							
+							<h2 id="AI-anchor">Mechanic - AI-Environment Reactivity:</h2>
+							
+							<iframe width="1200" height="680" autoplay allowfullscreen frameborder="0";
+								src="https://www.youtube.com/embed/wINMRo3ryUM">
+							</iframe>
+							
 							
 							<h2 id="perception-anchor">AI Perception Improvement:</h2>						
 							
 							
-							<p>The first step in AI work was to improve the way in which Unreal's perception system detects the player by sight.<br />
-							The default method raycasts against the center of the player, producing unwanted results illustrated below:</p>
+							<p>The first step was to improve the way Unreal's perception system detects the player by sight.<br />
+							The default method raycasts towards the center of the player, producing unwanted results:</p>
 							
 							<span class="image main"><img src="images/perception.jpg" alt="" /></span>
 							
-							<p>To fix this, the CanBeSeenFrom interface was rewritten for the player character, to introduce a second raycast against the position of the camera, the best representation of the head.</p>
+							<p>To fix this, the CanBeSeenFrom interface was rewritten for the player character, to introduce a second raycast against the position of the camera, the best representation of the head:</p>
 							
 <pre>
 <code class="cpp-html">
@@ -120,33 +128,34 @@ return false;
 </code>
 </pre>						
 							
-							<p>The check against the capsule centre was kept for situations in which the head is obscured, but no further checks were added for sake of performance.<br />
-							Likewise, the code was optimised as much as was possible due to its potential for use on every tick, and potentially including two raycasts.<br />
+							<p>I kept the capsule-centre raycast, but no further checks were added for sake of performance.<br />
+							The code was optimised as much as was possible due to its potential continuous use, and including two raycasts.<br />
 							This has proven suitable for my needs in testing, though may be revisited in future.</p>
 							
 							<h2 id="EQS-anchor">Environment Query System Usage:</h2>
 							
 							<span class="image main"><img src="images/EQS.png" alt="" /></span>
 							
-							<p>As I began to develop the AI behaviour, the need arose for a "search" state that the AI would switch to after losing sight of the player, or as it investigates the source of a noise.</p>
+							<p>As I developed AI behaviour, I needed a "search" state that the AI would switch to after losing sight of the player, or as it investigates the source of a noise.</p>
 							
 							<p>After some research, I began using the Environment Query System as the basis of this.<br />
-							In a cone forwards from the AI, locations are judged on their distance and visibility from the AI's current position to prioritise blind spots to be searched.<br />
-							This is used to find a search location, and the process is repeated several times unless interrupted by new stimuli.</p>
+							In a cone forwards from the AI, locations are judged on their distance and visibility to prioritise accessible blind spots.<br />
+							This is used to find and move towards a search location, this process is repeated several times unless interrupted by new stimuli.</p>
 							
-							<p>Due to some test cases giving no blind spots in a direction, I expanded on this behaviour to make the AI rotate and repeat this process in a new direction if no suitable positions are found.</p>
+							<p>Some test cases gave no blind spots in a direction, so I expanded this to make the AI rotate and repeat this in a new direction if no suitable spots are found.</p>
 							
-							<p>This has proven suitable in testing, and I am experimenting with further uses of the EQS, such as to center the AI's roaming behaviour to be "tethered" to the player location so that it never strays too far away by chance.</p>
+							<p>This has proven suitable in testing, and I am experimenting with further uses of the EQS to react to level layout and to "tether" the AI to the player so that it never strays too far away by chance.</p>
 							
 							
 							
 							<h2 id="navigation-anchor">AI Navigation Foundations:</h2>
 							
-							<p>As I began to work on the AI and its ability to navigate levels, I first settled on some key design principles:</p>
+							<p>As I worked on AI navigation, I first settled on some key design principles:</p>
 							
-							<p>For sake of performance, the navmesh would only update in real-time, from earmarked actors only.<br />
-							These earmarked actors would affect the navmesh only through navmesh modifiers to provide maximum control over their effects.<br />
-							Likewise, these objects would not collide with the AI, instead relying on their navmesh alterations to confine movement. This is to avoid unwanted behaviour emerging from physics quirks.</p>
+							<p>For sake of performance, the navmesh would update in real-time from earmarked actors only.<br />
+							These earmarked actors would affect the navmesh through navmesh modifiers to provide maximum control over their effects.<br />
+							These objects would not collide with the AI, instead relying on their navmesh modifiers to limit movement.<br />
+							This was done to avoid collision mishaps with moving parts.</p>
 							
 							
 							<h2 id="door-anchor">AI - Door Interaction:</h2>
@@ -154,77 +163,63 @@ return false;
 							<span class="image main"><img src="images/AIDoors.png" alt="" /></span>
 							
 							
-							<p>Doors were first developed with the player interaction system, for mouse/cursor based control.<br />
-							Hence, adding proper AI-interaction with this system presented an interesting challenge to solve.</p>
+							<p>Doors were made with the player interaction system, for mouse/cursor based control.<br />
+							Adding proper AI-interaction with this system presented an interesting challenge to solve.</p>
 							
-							<p>I started by adding a nav-link to doors, by which the AI recognises a passage between the navmesh either side of the doorway.<br />
-							With no collisions between the door and AI, as per the principles, this solved the first step of allowing AI-navigation.</p>
+							<p>I added a nav-link to doors, by which the AI recognises a passage between the navmesh either side of the doorway.<br />
+							Crossing the link would apply an impulse to the interaction component, propelling it into an open position.<br />
+							To avoid mishaps, the door was made immune to player input whilst moving, and would not bounce back from its limit despite the speed.</p>
 							
-							<p>The next step was to add proper interaction between the AI and the door as it passes through, including factoring in the state of the door.<br />
-							To start with this, I added a custom event to the nav-link for when the AI crosses it.<br />
-							This event applied an impulse to the interaction component to propel it into a fully open position, whilst pausing the AI's motion for a moment as the door opens.<br />
-							The functionality was also added such that player interaction could not interrupt this, and the door would not bounce back from its outer limit despite the force.</p>
+							<p>This was a huge improvement, albeit this process would take place even for an open door.<br />							
+							Using the interaction component's open/close delegates, I alternated between the navlink and a navmodifier that allows ordinary movement through the doorway.</p>
 							
-							<p>This was already a marked improvement to AI door usage, albeit this process would take place even for an open door, with the same delay to AI movement.</p>
-							
-							<p>The interaction component of the door contains delegates related to it's movement and openness.<br />
-							I used these to enable/disable the navlink based on the door's position, alternating with a navmodifier that enabled ordinary movement through the doorway.</p>
-							
-							<p>After some fine-tuning in testing, this provided an ideal solution to believable interaction between the AI and doors.<br />
-							It even improved gameplay through the risk/reward of a player stopping to attempt to close doors behind them in order to slow down a pursuing AI.</p>
+							<p>After some fine-tuning, this made a great solution to believable AI-door interaction.<br />
+							It even improved gameplay through the risk/reward of a player stopping to try to close doors behind them in order to slow down a pursuing monster.</p>
 							
 							<h2 id="door2-anchor">AI - Door Improvements:</h2>
 							
 							<span class="image main"><img src="images/AI_Door_Fix.png" alt="" /></span>
 							
-							<p>As I continued to test my system, I found a problem in my collisionless, entirely navmesh-driven approach to doors;<br />
-							AI controlled characters would happily pass through the mesh of an open door as they walk past the doorway.</p>
+							<p>As I continued testing, I found a problem in my entirely navmesh-driven approach to doors;<br />
+							NPCs would happily pass through the mesh of an open door as they walk past the doorway.</p>
 							
-							<p>To solve this, an additional nav modifier was attached to the door mesh.<br />
-							This maintained the collisionless approach, and an increased navigation cost through doors encourages the AI to pass around them.<br />
-							This approach also ensured the AI could still pass through doors if absolutely necessary, avoiding any cases of becoming trapped due to unfortunate door movement.</p>
+							<p>An extra nav modifier was attached to the door mesh, with an increased navigation cost that encourages the AI to pass around them.<br />
+							The AI could still pass through doors if absolutely necessary, avoiding any cases of becoming trapped due to unfortunate door movement.</p>
 							
-							<p>I also took this opportunity to add in proper handling of locked doors for the player and AI.<br />
-							This consisted of adding in more means of locking/unlocking doors, such as physical latches, and the ability for the AI to force a door open, rendering the lock inoperable in the process.</p>
+							<p>I also took this opportunity to add in more means of locking/unlocking doors, such as physical latches and the ability for NPCs to force a door open, rendering the lock inoperable in the process.</p>
 							
 							<h2 id="obstacle-anchor">Dynamic Obstacle-Navmesh Effects:</h2>
 							
 							<span class="image main"><img src="images/AIPlank.png" alt="" /></span>
 							
-							<p>After door interaction, designing AI-affecting obstacles was mainly a matter of applying what doors had taught me and experimenting with Navigation Query Filters.</p>
+							<p>Designing AI-obstacles was mainly about applying what doors had taught me and experimenting with Navigation Query Filters.<br />
+							The first of these was barricades blocking passages, such as nailed boards across a doorway.</p>
 							
-							<p>The nominal dynamic obstacle is any form of barricade blocking a passage, such as nailed boards across a doorway.<br />
-							For these, I tested using a navmodifier whose "area class" changed as the obstacle is cleared.<br />
-							Starting as a full obstacle, partial clearing changes the area class to a partial obstacle, finally it becomes natural navmesh when fully cleared.<br />
-							Instead of overriding the default navigation cost, these  area classes use differing costs of entry so that the act of crossing the barrier applies cost, instead of any quirk of the nav modifier size.</p>
+							<p>I used a navmodifier whose "area class" changes as the barrier is dismantled, becoming ordinary navmesh when fully destroyed.<br />
+							Instead of overriding default navigation cost, the area classes use costs of entry so the act of crossing the barrier applies cost.</p>
 							
-							<p>I began utilising Navigation Query Filters for the AI based on its current state, to further affect how it reacted to obstacles.<br />
-							Normal roaming excluded full obstacles areas entirely, to prevent crossing.<br />
-							Investigating a sound on the other hand would remove any extra cost of crossing a partial obstacle. Full obstacles retained a crossing cost to encourage the AI to take clear paths to investigate, if possible.<br />
-							When the AI was actively hostile to the player, partial and full obstacles lost all extra navigation cost, resulting in the most direct path being taken to catch the player.</p>
-							
-							<p>Whilst the navigation cost values required adjustment, this has proven suitable for altering the way the AI navigates the environment, based on player actions.</p>
+							<p>I used Navigation Query Filters for the AI to react to obstacles differently based on AI-state.<br />
+							NPCs would avoid obstacles when roaming, but happily break them to investigate noises, with only full obstacles applying some extra navigation cost.<br />
+							Hostile NPCs would ignore barriers entirely, prioritising the most direct path to the player.</p>
 							
 							
 							<h2 id="light-anchor">Player Light-Visibility Testing:</h2>
 							
-							<p>To further develop the ways in which the AI detects the player, I developed a method for checking the player's exposure to light sources within the level.</p>
+							<p>To factor lighting into stealth, I added a way to check the player's light exposure.</p>
 							
-							<p>To track only the relevant lights, a collision volume on the player uses the beginning and end of overlap with light sources to add and remove them from the list of lights to test.<br />
-							Each light source is given its own implementation of a Blueprint Interfaceto determine the extent by which it can affect the player, and how.<br />
-							This was done so that light sources made within the editor - based on my C++ classes - can be set up by somebody without coding experience without issue.</p>
+							<p>A collision volume on the player uses overlap with light sources to add and remove them from the list of lights to test.<br />
+							Each light type gets its own implementation of a Blueprint Interface to determine the extent it effects the player, and how.<br />
+							This was done so that light sources made in the editor - based on my C++ classes - can be set up by somebody without coding experience without issue.</p>
 							
-							<p>Each light adds to a "light detection value" of the player each tick, which ranges from zero illumination to a given maximum value.<br />
-							The light detection value is then matched against a curve by the AI Controller.<br />
-							This provides the final multiplier to the AI's detection of the player, altering the amount of time taken to recognise the player when they are visible.</p>
+							<p>Lights add to a "light detection value" of the player each tick, which is matched against a curve by the AI Controller.<br />
+							This provides the multiplier to the detection of the player, changing the time taken to recognise the player when they are visible.</p>
 							
-							<p>This method has proven suitable in testing.<br />
-							The use of a curve mapping the player illumination to detection time has allowed for easy adjustment in testing, and allows for more control than a basic linear interpolation.</p>
+							<p>The use of a curve mapping the player illumination to detection time has allowed for easy adjustment in testing, and allows for more control than a basic linear interpolation.</p>
 							
 							
-							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<a href="UnrealGame.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
-							<a href="generic8.html">To see all development summaries, click here.</a>
+							<a href="UnrealFeatureHub.html">To see all development summaries, click here.</a>
 						</div>
 					</div>
 

@@ -42,16 +42,16 @@
 						<h2>Menu</h2>
 						<ul>
 							<li><a href="index.html">Home</a></li>
-							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
-							<li><a href="generic9.html">Unreal Engine C++ Key Features</a></li>
-							<li><a href="generic8.html">Unreal Engine C++ Progress Logs</a></li>
-							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
-							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
-							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="ScreenSpaceEffects.html">Screen-Space Effects and Extra</a></li>
+							<li><a href="UnrealGame.html">Unreal Engine C++ Key Features</a></li>
+							<li><a href="UnrealFeatureHub.html">Unreal Engine C++ Progress Logs</a></li>
+							<li><a href="gamemod.html">Game Total-Conversion Project</a></li>
+							<li><a href="modextra.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="EditorTools.html">Unreal Engine Editor Tools</a></li>
 							<li><a href="lowlevelpage.html">C++ Low Level Programming</a></li>
-							<li><a href="generic3.html">Team Project</a></li>							
-							<li><a href="generic2.html">Game Project</a></li>
-							<li><a href="generic.html">Graphics Project</a></li>
+							<li><a href="TeamProject.html">Team Project</a></li>							
+							<li><a href="GoatProject.html">Game Project</a></li>
+							<li><a href="OpenGLProject.html">Graphics Project</a></li>
 						</ul>
 					</nav>
 
@@ -70,9 +70,9 @@
 								<li> <a href="#overlay-anchor">Overlay Material Usage</a> </li>									
 							</ul>
 							
-							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<a href="UnrealGame.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
-							<a href="generic8.html">To see all development summaries, click here.</a>
+							<a href="UnrealFeatureHub.html">To see all development summaries, click here.</a>
 							<p></p>
 							
 							<h2 id="terminal-anchor">Rendering - Dynamic Colour Quantisation and Dithering:</h2>
@@ -82,23 +82,23 @@
 							<p></p>
 							<h2 id="foundation-anchor">Initial Foundations:</h2>
 							
-							<p>For this feature, I set out to create a postprocessing method to emulate retro-graphics through the use of colour quantisation and dithering.<br />
+							<p>I set out to create postprocessing to emulate retro-graphics through the use of colour quantisation and dithering.<br />
 							I wanted to achieve this whilst preserving the fidelity of user interfaces like my terminals.</p>
 							
-							<p>To begin with, I implemented postprocessing to downsample the source image, and quantise the image colour.<br />
-							From here, I use Bayer noise to apply dithering to the quantisation values, helping to smooth the transition between quantised colours and create colour gradients.<br />
+							<p>I started with postprocessing to downsample the source image, and quantise the colour.<br />
+							I used Bayer noise to apply dithering to the quantisation values, smoothing the transition between quantised colours.<br />
 							The quantisation number for each colour may be set individually, and changed during runtime for effects.</p>
 							
-							<p>I decided to experiment with applying different downsampling and quantisation based on information in Unreal Engine's custom stencil buffer<br />
-							This let me selectively increase the fidelity of elements such as user interfaces and objects that are currently in player focus.<br />
-							I found this method to work suitably, allowing UI elements to be presented in the same style as their surroundings but without harming their legibility.</p>
+							<p>I experimented with applying different downsampling/quantisation to objects, using Unreal Engine's custom stencil buffer.<br />
+							This let me increase the fidelity of elements such as user interfaces and objects that are currently bring interacted with.<br />
+							This worked suitably, allowing UI elements to be presented in the same style as their surroundings but without harming their legibility.</p>
 							
 							<iframe width="1598" height="680"
 								src="images/PaintingDither.jpg">
 							</iframe>
 							
 							<p>Whilst experienced in writing rendering code from my Global Illumination Project, I prototyped the material entirely with the engine's node-based system.<br />
-							Hence, I adapted my understanding to the required node-system, utilising material functions where possible in place of repeated-use functions.</p>
+							Hence, I adapted my understanding, utilising material functions where possible to avoid repetition.</p>
 							
 							<p>This presented some issues like a seeming lack of matrices within the editor, which I found solutions to such as the reading of a texture to provide the noise values used for dithering.</p>
 							
@@ -108,13 +108,11 @@
 							
 							<h2 id="parameter1-anchor">Improved Passing of Data to Postprocessing:</h2>
 							
-							<p>In my early work, I passed values through by creating a dynamic material instance for each postprocess.<br />
-							This required a convoluted process by which the player character found a level's postprocess volume, replacing its materials with newly created dynamic material instances.</p>
+							<p>In my early work, I passed values by creating a dynamic material instance for each postprocess.<br />
+							This took a convoluted process where on level-start the postprocess volume was found and it's materials were replaced with these instances.</p>
 							
-							<p>Hence, I began using Material Parameter Collections.<br />
-							These proved far more suitable to work with. All shaders may freely draw from these collections without the need to set up dynamic instances.<br />
-							Because of this, I could apply my postprocesses to the player character's multiple cameras without managing material instances of each process.<br />
-							This removes the need for a postprocess volume within every level, and gives me a tidier and more manageable setup.</p>
+							<p>That was messy, so I began using Material Parameter Collections.<br />
+							These were much better to work with, passing data to materials with no need to create and manage several dynamic instances.</p>
 							
 							<h2 id="hlsl-anchor">HLSL Usage in Materials:</h2>
 							
@@ -122,29 +120,29 @@
 								src="images/ImprovedMaterial.jpg">
 							</iframe>
 							
-							<p>With the entirely node-based prototype working, I revisited it and rewrote large portions with HLSL, to tidy up and optimise my most computationally intensive postprocess.<br />
-							This change reduced computational cost of the material and made it far more readable than the previous node-spaghetti.</p>
+							<p>With the node-based prototype working, I revisited it and rewrote large portions in HLSL to tidy up and optimise my most intensive postprocess.<br />
+							This reduced computational cost of the material and made it far more readable than the previous node-spaghetti.</p>
 							
 							<h2 id="wobble-anchor">Applying Parameter Collections - Dynamic Vertex Snapping:</h2>
 							
 							<p>With the utility of material parameter collections, I experimented with some other effects.<br />
 							Amongst these was emulating the "vertex snapping" of older hardware, scaling in its intensity based on the player's health.</p>
 							
-							<p>To achieve a scaling intensity, the player's health produces a value whenever it changes, mapped between the possible extents for vertex snapping.<br />
-							This value is set in a material parameter collection, and then read by a material function going into the world position offset of materials.</p>
+							<p>Whenever player health changes, it is mapped into a vertex snapping value and passed to a MPC.<br />
+							This is read by a material function affecting the world position offset of materials.</p>
 							
-							<p>This use of a material function allows me to easily add or remove this effect from any material and object I need without difficulty.<br />
+							<p>I can easily add or remove this function from any material and object I need.<br />
 							Within the function, the camera-relative world position is divided, floored, and then multiplied by the scaled parameter.<br />
 							The result of this is subtracted from the relative world position to give the offset applied to the vertex.</p>
 							
-							<h2 id="parameter2-anchor">Optimising Dynamic Materials for Objects through Custom Primitive Data:</h2>
+							<h2 id="parameter2-anchor">Optimising Dynamic Materials through Custom Primitive Data:</h2>
 							
-							<p>Initially, I enabled visual changes in objects such as switching the emissive texture of a light mesh, through the swapping of the mesh material.<br />
-							This poor approach was quickly replaced with the use of dynamic material instances, for which a scalar could be changed to interpolate between emissive textures.</p>
+							<p>My early work changed mesh appearances - such as switching the emissive texture of a lightbulb - by replacing the material itself.<br />
+							This poor approach was quickly replaced with dynamic material instances where a scalar could interpolate between emissive textures.</p>
 							
-							<p>Wanting to further improve on this, I began utilising custom primitive data to pass information to a shader without even needing to create a dynamic material instance.</p>
+							<p>To further improve this, I began using custom primitive data to pass information to a shader without needing dynamic material instances.</p>
 							
-							<p>This approach has worked wonderfully, and allows for the easy adjustment of these parameters within my C++ code.</p>
+							<p>This approach has worked wonderfully, and allows for the easy adjustment of parameters within my C++ code.</p>
 							
 <pre>
 <code class="cpp-html">
@@ -156,24 +154,20 @@ SignalPrimitive->SetCustomPrimitiveDataFloat(1, 1.0f);
 </code>
 </pre>	
 							
-							<p>Custom primitive data is also well suited for working with instanced static meshes, wherein each instance may have its own custom primitive data.<br />
-							This bypasses the inability to assign different materials or material instances to the different mesh instances, which can be applied in all sorts of ways from object colour to more advanced methods.</p>
+							<p>Custom primitive data is well suited for working with instanced static meshes, where each instance may have its own custom primitive data.<br />
+							This bypasses the inability to assign different materials or instances to mesh instances, which can be applied in all sorts of ways from object colour to more advanced effects.<br />
+							This is important due to the use of instanced meshes to reduce draw calls and improve performance.</p>
 							
-							<p>This is important due to the use of instanced meshes to reduce draw calls and improve performance.<br />
-							This bypasses the inability to assign different materials or material instances to the different mesh instances, which can be applied in all sorts of ways from object colour to more advanced methods.</p>
-							
-							<p>With this approach, I made various material "archetypes" for objects such as interactive buttons which glow when usable, to streamline my workflow.</p>
 							
 							<h2 id="overlay-anchor">Overlay Material Usage:</h2>
 							
-							<p>During my work, I found I sometimes needed to apply specific visual effects to numerous objects at some point during runtime, but did not want to factor this effect into the numerous materials of these objects.<br />
+							<p>I found I sometimes needed to apply visual effects to numerous objects at some point during runtime, but it would be inefficient to factor this into their different materials.<br />
+							I began using overlay materials, which can be applied and removed during runtime.</p>
 							
-							<p>To solve this, I began using overlay materials, which can be applied and removed during runtime.</p>
+							<p>These create an additional draw call and can be utilised for numerous visual effects - in my case applying a sheen to show an object is ready to be released.<br />
+							By ensuring overlay materials are removed when they are no longer needed, any performance impact is negligible, whilst the materials of the base-objects remain consistently simple.</p>
 							
-							<p>Overlay materials create an additional draw call, and can be utilised for numerous visual effects. In my case, it is for applying a sheen effect to objects when they are in the right place for a purpose.<br />
-							By ensuring that overlay materials are removed after they are no longer needed, any performance impact is negligible, whilst the materials of the base-objects remain consistently simple.</p>
-							
-							<p>Overlay materials can also be managed in code, allowing me to manage their addition and removal within the component attached to an actor to grant object carrying logic.</p>
+							<p>Overlay materials can also be managed in code, allowing me to control them through the component that grants an actor object carrying logic.</p>
 							
 <pre>
 <code class="cpp-html">
@@ -187,7 +181,7 @@ for (UStaticMeshComponent* MeshComponent: MeshComponents)
 </code>
 </pre>
 
-							<p>This and the use of custom primitive data have been wonderful for creating more visually dynamic objects, for both better visuals and to better convey information to the player.</p>
+							<p>Using this and custom primitive data has been wonderful for creating more visually dynamic objects that are simple to control within the code.</p>
 							
 							<iframe width="534" height="345"
 								src="images/fuseboxgif.gif">
@@ -195,9 +189,9 @@ for (UStaticMeshComponent* MeshComponent: MeshComponents)
 							
 							<p></p>
 							
-							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<a href="UnrealGame.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
-							<a href="generic8.html">To see all development summaries, click here.</a>
+							<a href="UnrealFeatureHub.html">To see all development summaries, click here.</a>
 						</div>
 					</div>
 

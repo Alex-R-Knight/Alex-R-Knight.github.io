@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Alex Knight Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									</span><span class="title">To Home Page</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="ScreenSpaceEffects.html">Screen-Space Effects and Extra</a></li>
+							<li><a href="UnrealGame.html">Unreal Engine C++ Key Features</a></li>
+							<li><a href="UnrealFeatureHub.html">Unreal Engine C++ Progress Logs</a></li>
+							<li><a href="gamemod.html">Game Total-Conversion Project</a></li>
+							<li><a href="modextra.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="EditorTools.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="lowlevelpage.html">C++ Low Level Programming</a></li>
+							<li><a href="TeamProject.html">Team Project</a></li>							
+							<li><a href="GoatProject.html">Game Project</a></li>
+							<li><a href="OpenGLProject.html">Graphics Project</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>Game Total-Conversion Project -  Extra</h1>
+					
+							<p>An example of developing a mechanic for a major update:</p>
+							
+							<span class="image main"><img src="images/pic26.jpg" alt="" /></span>
+							
+							<h3 id="start-anchor">The Main Design:</h3>
+							
+							<p>During development of update 1.4 "Silicon Dreams", in which I was involved with much of the content, I set out to designing a mechanic to change the gameplay loop of land-combat - the primary gameplay loop of the default game.</p>
+							
+							<p>In the original game, the combat gameplay loop for sending a single "unit" to a conflict consists of finding and exploiting a gap in enemy lines in order to push through and rapidly end the conflict.<br />
+							Whilst the mod already expands such scenarios to add extra mechanical depth, the goal in this update was to create a new way for the player to interact with this gameplay loop.</p>
+							
+							<p>I designed a system which would track other statistics of the unit in order to gauge "performance", which would than affect the player reward at the conclusion of the conflict or when a player chose to withdraw to save resources.<br />
+							The base game only tracks this information to promote unit commanders, so a system to take this info and tally it for a different purpose was developed.<br />
+							I made a GUI to help the player keep track of their objectives and progress, and then made quality of life improvements like always-visible deadline timers to help the player keep track.</p>
+							
+							<h3 id="QA-anchor">QA and Polish:</h3>
+							
+							<p>Once I had finished code and GFX for this first version, I began testing it through close cooperation with our QA team.<br />
+							Testers would use the mechanic during a testing playthrough, and provide both general feedback as well as statistics of each test.<br />
+							Statistics and feedback were vital to the fine-tuned balancing of the system, involving many different tracked values and interacting with the other game mechanics such as the economy system.</p>
+							
+							<p>Test reports showed that the mechanic was enjoyed by players, found to be unique and most importantly given the initial goal, saw players intentionally changing the way in which they played.<br />
+							Players prioritised creating the ideal conditions to complete objectives, at times even hindering the overlords they were supposed to serve, in order to further the objectives and their rewards for high completion.<br />
+							This fully achieved the objective of changing the normal gameplay loop and fit into the themes of the update.</p>
+							
+							<p>Testing also showed that unpredictable AI behaviour could create unsuitable mechanic conditions before player involvement began.<br />
+							To solve this, I implemented modifiers to the AI controlled countries that impede significant changes to the combat area until the player is actively involved.<br />
+							These only take effect if the relevant country is player controlled, otherwise leaving AI to act naturally.</p>
+							
+							<h3 id="end-anchor">Results:</h3>
+							
+							<p>This mechanic was a total success in its design and implementation, and has been well received in the now-released update.<br />
+							It helped me to develop my skills in design, and developing creative solutions to the problems of using often hard-coded default features.<br />
+							It also helped me to practise working closely with the mod QA team to refine and improve on concepts.</p>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>My links</h2>
+								<ul class="icons">
+									<li><a href="https://github.com/Alex-R-Knight" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; Alex Knight | 2023 </li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

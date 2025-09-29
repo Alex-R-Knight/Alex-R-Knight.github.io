@@ -42,16 +42,16 @@
 						<h2>Menu</h2>
 						<ul>
 							<li><a href="index.html">Home</a></li>
-							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
-							<li><a href="generic9.html">Unreal Engine C++ Key Features</a></li>
-							<li><a href="generic8.html">Unreal Engine C++ Progress Logs</a></li>
-							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
-							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
-							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="ScreenSpaceEffects.html">Screen-Space Effects and Extra</a></li>
+							<li><a href="UnrealGame.html">Unreal Engine C++ Key Features</a></li>
+							<li><a href="UnrealFeatureHub.html">Unreal Engine C++ Progress Logs</a></li>
+							<li><a href="gamemod.html">Game Total-Conversion Project</a></li>
+							<li><a href="modextra.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="EditorTools.html">Unreal Engine Editor Tools</a></li>
 							<li><a href="lowlevelpage.html">C++ Low Level Programming</a></li>
-							<li><a href="generic3.html">Team Project</a></li>							
-							<li><a href="generic2.html">Game Project</a></li>
-							<li><a href="generic.html">Graphics Project</a></li>
+							<li><a href="TeamProject.html">Team Project</a></li>							
+							<li><a href="GoatProject.html">Game Project</a></li>
+							<li><a href="OpenGLProject.html">Graphics Project</a></li>
 						</ul>
 					</nav>
 
@@ -60,9 +60,9 @@
 						<div class="inner">
 							<h1>Unreal Engine Five - Dialogue System Testing</h1>
 							
-							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<a href="UnrealGame.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
-							<a href="generic8.html">To see all development summaries, click here.</a>
+							<a href="UnrealFeatureHub.html">To see all development summaries, click here.</a>
 							<p></p>
 							
 							<h2 id="terminal-anchor">Mechanic - Branching Dialogue System:</h2>
@@ -74,20 +74,20 @@
 							<p></p>
 							<h2 id="foundation-anchor">Initial Foundations:</h2>
 							
-							<p>I set out to create a dialogue system based around the use of intercoms, which would allow the player to communicate whilst nearby to them whilst leaving their hands free for other activity.<br />
-							Whilst the models especially, but also UI visuals are placeholder, I have completed the functional side of the first iteration of this system.</p>
+							<p>I wanted to make a dialogue system using proximity-based intercoms, so the player could interact with the environment and speak at the same time.<br />
+							Whilst all visuals are placeholder, I have completed the functional side of the first iteration of this system.</p>
 							
-							<p>I decided to try using data tables to hold the data of my branching dialogue. This allows the intercom to retrieve a dialogue entry, which will contain the dialogue text along with all options, their text and the data table locations of their following entries.<br />
-							The UI can then display that text in a typewriter-style, which I also applied to highlighting the player's response when it is selected, before the intercom moves to the next dialogue entry.<br />
-							This text highlighting was achieved through using Rich Text Blocks in the widget, for which the indicators for text style are inserted into the displayed text.</p> 
+							<p>Dialogue data is held in a data table. The intercom retrieves a table entry, which has the text along with all options, their text and the data table addresses of their following entries.</p> 
 							
-							<p>The intercom itself terminates dialogue if the player moves too far away after activation. To make this more intuitive, I added signal lights with multiple materials.<br />
-							One would light to warn the player is close to exiting the area of use, whilst the other may light to indicate use, but also flash to signal incoming messages.<br />
-							Because all intercoms within a level would assumedly be connected, the gamemode may store and update a "bookmark" position for what point to start dialogue from, updated by other happenings in-game or if a conversation is ended prematurely.</p>
+							<p>The UI uses typewriter-style movement to display text and also to highlight a player response when it is chosen, using Rich Text widget elements.</p> 
 							
-							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<p>The intercom terminates dialogue if the player moves too far away. To make this more intuitive, signal lights were added.<br />
+							One warns when the player is close to exiting the area of use, whilst the other indicates use and flashes to signal incoming messages.<br />
+							Because intercoms in a level would be connected, the gamemode stores and updates a "bookmark" table address from which to start dialogue, updated by other events in-game or if a conversation is ended prematurely.</p>
+							
+							<a href="UnrealGame.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
-							<a href="generic8.html">To see all development summaries, click here.</a>
+							<a href="UnrealFeatureHub.html">To see all development summaries, click here.</a>
 						</div>
 					</div>
 

@@ -42,16 +42,16 @@
 						<h2>Menu</h2>
 						<ul>
 							<li><a href="index.html">Home</a></li>
-							<li><a href="generic7.html">Screen-Space Effects and Extra</a></li>
-							<li><a href="generic9.html">Unreal Engine C++ Key Features</a></li>
-							<li><a href="generic8.html">Unreal Engine C++ Progress Logs</a></li>
-							<li><a href="generic5.html">Game Total-Conversion Project</a></li>
-							<li><a href="generic6.html">Game Total-Conversion Project - Extra</a></li>
-							<li><a href="generic4.html">Unreal Engine Editor Tools</a></li>
+							<li><a href="ScreenSpaceEffects.html">Screen-Space Effects and Extra</a></li>
+							<li><a href="UnrealGame.html">Unreal Engine C++ Key Features</a></li>
+							<li><a href="UnrealFeatureHub.html">Unreal Engine C++ Progress Logs</a></li>
+							<li><a href="gamemod.html">Game Total-Conversion Project</a></li>
+							<li><a href="modextra.html">Game Total-Conversion Project - Extra</a></li>
+							<li><a href="EditorTools.html">Unreal Engine Editor Tools</a></li>
 							<li><a href="lowlevelpage.html">C++ Low Level Programming</a></li>
-							<li><a href="generic3.html">Team Project</a></li>							
-							<li><a href="generic2.html">Game Project</a></li>
-							<li><a href="generic.html">Graphics Project</a></li>
+							<li><a href="TeamProject.html">Team Project</a></li>							
+							<li><a href="GoatProject.html">Game Project</a></li>
+							<li><a href="OpenGLProject.html">Graphics Project</a></li>
 						</ul>
 					</nav>
 
@@ -72,9 +72,9 @@
 								<li> <a href="#floppy-anchor">Disk System</a> </li>								
 							</ul>
 							
-							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<a href="UnrealGame.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
-							<a href="generic8.html">To see all development summaries, click here.</a>
+							<a href="UnrealFeatureHub.html">To see all development summaries, click here.</a>
 							<p></p>
 							
 							<h2 id="terminal-anchor">Mechanic - Interactive Terminal System:</h2>
@@ -84,23 +84,24 @@
 							<p></p>
 							<h2 id="foundation-anchor">Initial Foundations:</h2>
 							
-							<p>After practise creating a keypad system, I set out to create a terminal system through which a player could manually enter commands to alter or view their environment.<br />
+							<p>After practise creating a keypad system, I set out to make a terminal system to let the player manually enter commands to alter or view their environment.<br />
 							This first version toggled between viewing camera feeds of different rooms. To create these I used a Scene Capture Component.</p>
 							
 							<iframe width="600" height="340"
 								src="images/levercapturegif.gif">
 							</iframe>
 							
-							<p>Like in the keypad, I used a Widget Component to make the screens physical parts of the world instead of an unimmersive overlay.<br />
-							I used an inspection component from my interaction system both to better view the monitors, and to tell the monitor when to receive player input, through the use of delegates in the inspection component.</p>
+							<p>Like in the keypad, I used a Widget Component to make the screens physical parts of the world instead of an unimmersive popup.<br />
+							I used an inspection component from my interaction system to better view the monitors and to tell the monitor when to receive player input, through the use of delegates in the inspection component.</p>
 							
 							<iframe width="600" height="340"
 								src="images/TerminalLeanGif.gif">
 							</iframe>
 							
 							<p>I used a widget switcher to alternate camera views on the camera monitor, then whilst investigating methods for the terminal, I found a wonderful 80 Level article by the devs of "Tartarus" about their work to create a terminal system in UE4.<br />
-							Following the lead of this guide, I made the terminal widget use a scroll box of an additional widget which represents each line, containing it's text.<br />
-							Whilst this guided my design of the terminal widget, I have achieved the rest of my end result quite differently to what they have described.<br />
+							Following the lead of this guide, I made the terminal widget use a scroll box of an additional widget which represents each line, containing it's text.</p>
+							
+							<p>Whilst this guided my design of the terminal widget, I have achieved the rest of my end result quite differently to what they have described.<br />
 							Notably, all logic for my system has been written in C++, blueprint used only for the assignment of meshes to the actor and widget layout (over base C++ classes).</p>
 							
 							<p>The aformentioned article described the use of a Scene Capture Component recording a widget component of the terminal, to then apply effects to the output of the capture component. This was described as producing a significant performance cost when in use, leading to optimisation measures.<br />
@@ -124,11 +125,11 @@
 								src="images/terminalindexgif.gif">
 							</iframe>
 							
-							<p>As a vision for a gameplay demo centred around terminal usage developed, greater requirements for the terminal system were found.<br />
-							The first of these was an interactive keyboard, that could both respond to player key presses, and deliver them if interacted with directly.</p>
+							<p>As a gameplay demo based around terminal usage developed, I found greater needs for the terminal system.<br />
+							The first of these was an interactive keyboard that could both respond to player key presses, and deliver them if interacted with directly.</p>
 							
-							<p>This was handled through the addition of a keyboard which would on game start create keys from a given TArray of references.<br />
-							When the terminal received input, any FKey matching a corresponding physical key would trigger movement, likewise key interaction would deliver the FKey to the terminal.</p>
+							<p>This was handled by adding of a keyboard which on game start creates keys from a TArray of references.<br />
+							When the terminal receives input, any FKey matching a corresponding physical key would trigger movement, likewise key interaction would deliver the FKey to the terminal.</p>
 												
 <pre>
 <code class="cpp-html">
@@ -149,9 +150,11 @@ for (TSubclassOf<AKeyboardButton> ButtonKeyReference: ButtonKeyReferences)
 
 							<h2 id="string-anchor">Advanced Command Processing:</h2>
 							
-							<p>The terminals ability to process commands was improved, to accurately point out the incorrect parameter in invalid commands.<br />
+							<p>The terminals command processing was improved to accurately point out the incorrect parameter in invalid commands.<br />
 							A key part of this was a reusable function to verify that an input string either consisted purely of, or began with a given parameter.<br />
-							If this were the case, then this parameter may be chopped from the start of the string, in order to verify the next parameter.</p>
+							If so, this parameter is chopped from the start of the string in order to verify the next parameter.</p>
+							
+							<p>I took this parameter-based approach over something more hard-coded because the terminal's uses were still developing, and this let me prototype quickly inside the engine.</p>
 							
 <pre>
 <code class="cpp-html">
@@ -165,12 +168,11 @@ return false;
 
 							<h2 id="input2-anchor">Advanced Input Control:</h2>
 							
-							<p>As switching the terminal manual to an interaction-based system freed up the arrow keys, they could be repurposed.<br />
-							The ability was added to recall previously entered commands, and to move through the current command to add or remove characters at any position.</p>
+							<p>Changing the terminal manual to use the interaction system freed up the arrow keys, which could be repurposed.<br />
+							I used them to recall previously entered commands, and to move through the current command to add or remove characters at any position.</p>
 							
-							<p>This was achieved by altering the command-line widget to consist of two text blocks on either side of the line's cursor.<br />
-							Whilst the key user input string would remain stored as normal, any update to the displayed text would split it into the characters on either side of the cursor, to set as the text of these text blocks.</p>
-
+							<p>This was done by altering the command-line widget to consist of two text blocks on either side of the line's cursor.</p>
+							
 <pre>
 <code class="cpp-html">
 const FString& FirstString = TextIn.Left(CursorPosition);
@@ -181,8 +183,8 @@ SetLatterText(SecondString);
 </code>
 </pre>
 						
-							<p>After this, arrow key functionality was added so that the left and right keys would move the cursor across the current line.<br />
-							This cursor position would dictate the position about which characters are added or removed via key inputs.</p>
+							<p>Arrow key functionality was added so the left/right keys move the cursor across the current line.<br />
+							This cursor position dictates where in the string characters are added or removed via key inputs.</p>
 							
 <pre>
 <code class="cpp-html">
@@ -197,10 +199,10 @@ TerminalWidget->CurrentTerminalLine->SetDividedText(UserInputString, CursorPosit
 								src="images/terminalbars.gif">
 							</iframe>
 							
-							<p>Revisiting the visual side of the terminal, I added animated elements to the interface to help add visual variety to it's use.<br />
-							The moving scanline effect was also replaced with a more muted screen-wide flickering in the postprocess applied to the screen.</p>
+							<p>Revisiting the visual side, I added animated elements to the interface to help add visual variety to its use.<br />
+							The moving scanline effect was replaced with a more muted screen-wide flickering in the postprocess applied to the screen.</p>
 							
-							<p>The quantisation/dithering postprocessing was also improved to allow for different resolutions of dithering to be applied to in-focus objects, improving the visual quality of the terminal.</p>
+							<p>The quantisation/dithering postprocessing was improved so different resolutions of dithering could be applied to objects, improving the legibility of the terminal.</p>
 							
 							
 							<h2 id="floppy-anchor">Disk System:</h2>
@@ -209,17 +211,17 @@ TerminalWidget->CurrentTerminalLine->SetDividedText(UserInputString, CursorPosit
 								src="images/FloppyDrive.gif">
 							</iframe>
 							
-							<p>As part of further expanding the terminals functions, I added a second monitor and a disk drive with disks, utilising my interaction system.</p>
+							<p>As part of expanding terminal functions, I added a second monitor and a disk drive, utilising my interaction system.</p>
 							
-							<p>Disks store messages and enable terminal functions, locking some of its uses behind player exploration to find these disks, to form part of a gameplay loop.<br />
-							These new features should also facilitate new terminal functions being added. Also, the interface received a visual overhaul.</p>
+							<p>Disks store messages and enable terminal functions, locking some uses behind player exploration to find disks, to form part of a gameplay loop.<br />
+							This should also facilitate new terminal functions being added. Also, the interface received a visual overhaul.</p>
 						
 							<p></p>
 							<p>So far, working to create this terminal has been great practise in problem solving and interface development, with various technical issues found and quickly resolved.</p>
 							
-							<a href="generic9.html">For an overview of key UE5 features developed, click here.</a>
+							<a href="UnrealGame.html">For an overview of key UE5 features developed, click here.</a>
 							<p></p>
-							<a href="generic8.html">To see all development summaries, click here.</a>
+							<a href="UnrealFeatureHub.html">To see all development summaries, click here.</a>
 						</div>
 					</div>
 
